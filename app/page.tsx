@@ -24,6 +24,7 @@ export default function Home() {
           alt="Lagos Public Transportation Background"
           priority
           fill
+          sizes="100vw"
           className="object-fill w-full h-full filter brightness-105 contrast-105"
         />
         
@@ -41,6 +42,7 @@ export default function Home() {
               src={bgImg}
               alt="DixNova Logo"
               fill
+              sizes="56px"
               className="object-cover"
             />
           </div>

@@ -336,6 +336,7 @@ export default function ProblemStatementPage() {
                 src={bgImg}
                 alt="DixNova Logo"
                 fill
+                sizes="40px"
                 className="object-cover"
               />
             </div>
