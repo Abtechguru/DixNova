@@ -1,6 +1,7 @@
 import React from 'react';
 import { AdminSidebar } from '@/components/admin/AdminSidebar';
 import { AdminHeader } from '@/components/admin/AdminHeader';
+import { AdminAuthGuard } from '@/components/admin/AdminAuthGuard';
 
 export const metadata = {
   title: 'Admin Control Center | DixNova Transit Analytics',
@@ -9,20 +10,22 @@ export const metadata = {
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen bg-navy-950 text-slate-100 flex flex-col md:flex-row selection:bg-emerald-500 selection:text-white">
-      {/* Sidebar */}
-      <AdminSidebar />
+    <AdminAuthGuard>
+      <div className="min-h-screen bg-navy-950 text-slate-100 flex flex-col md:flex-row selection:bg-amber-400 selection:text-slate-950 font-sans">
+        {/* Admin Sidebar */}
+        <AdminSidebar />
 
-      {/* Main Content Area */}
-      <div className="flex-1 flex flex-col min-w-0">
-        {/* Admin Top Header */}
-        <AdminHeader />
+        {/* Main Admin Area */}
+        <div className="flex-1 flex flex-col min-w-0">
+          {/* Admin Header */}
+          <AdminHeader />
 
-        {/* Content Body */}
-        <main className="p-4 sm:p-8 flex-1 overflow-y-auto">
-          {children}
-        </main>
+          {/* Admin Body */}
+          <main className="p-4 sm:p-8 flex-1 overflow-y-auto">
+            {children}
+          </main>
+        </div>
       </div>
-    </div>
+    </AdminAuthGuard>
   );
 }

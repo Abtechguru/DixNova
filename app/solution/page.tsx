@@ -40,6 +40,8 @@ import {
   Sliders
 } from 'lucide-react';
 import bgImg from '@/app/public/bg.jpg';
+import { JudgesNavigation } from '@/components/layout/JudgesNavigation';
+import { PresentationLayout } from '@/components/layout/PresentationLayout';
 import dix0Img from '@/app/public/dix0.jpeg';
 
 export default function SolutionPage() {
@@ -120,10 +122,11 @@ export default function SolutionPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-navy-950 text-slate-100 flex flex-col justify-between selection:bg-emerald-500 selection:text-white font-sans">
-      
+    <PresentationLayout>
+      <JudgesNavigation />
+
       {/* 1. TOP HEADER WITH bg.jpg LOGO */}
-      <header className="relative z-30 px-6 sm:px-12 py-5 border-b border-slate-800/80 bg-navy-950/95 backdrop-blur-md sticky top-0">
+      <header className="relative z-30 px-6 sm:px-12 py-5 border-b border-slate-800/80 bg-navy-950/95 backdrop-blur-md sticky top-12">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           
           {/* Logo with bg.jpg */}
@@ -563,6 +566,6 @@ export default function SolutionPage() {
         <p>© {new Date().getFullYear()} DixNova. All rights reserved.</p>
         <span className="text-emerald-400 font-semibold tracking-wide">Innovation Driven By Data</span>
       </footer>
-    </div>
+    </PresentationLayout>
   );
 }

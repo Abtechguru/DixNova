@@ -50,6 +50,8 @@ import {
   HelpCircle
 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
+import { JudgesNavigation } from '@/components/layout/JudgesNavigation';
+import { PresentationLayout } from '@/components/layout/PresentationLayout';
 import bgImg from '@/app/public/bg.jpg';
 import dix0Img from '@/app/public/dix0.jpeg';
 
@@ -273,10 +275,11 @@ export default function ProblemStatementPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-navy-950 text-slate-100 flex flex-col justify-between selection:bg-amber-500 selection:text-white font-sans">
-      
+    <PresentationLayout>
+      <JudgesNavigation />
+
       {/* 1. TOP HEADER WITH bg.jpg LOGO */}
-      <header className="relative z-30 px-6 sm:px-12 py-5 border-b border-slate-800/80 bg-navy-950/95 backdrop-blur-md sticky top-0">
+      <header className="relative z-30 px-6 sm:px-12 py-5 border-b border-slate-800/80 bg-navy-950/95 backdrop-blur-md sticky top-12">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           
           {/* Logo with bg.jpg */}
@@ -302,6 +305,12 @@ export default function ProblemStatementPage() {
 
           {/* Navigation Action */}
           <div className="flex items-center gap-3">
+            <Link href="/objectives" className="hidden sm:block">
+              <button className="px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-xs font-bold text-amber-400 border border-amber-500/30 transition-all cursor-pointer">
+                Objectives
+              </button>
+            </Link>
+
             <Link href="/solution" className="hidden sm:block">
               <button className="px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-xs font-bold text-slate-300 border border-slate-800 transition-all cursor-pointer">
                 Our Solution
@@ -879,6 +888,6 @@ export default function ProblemStatementPage() {
         <p>© {new Date().getFullYear()} DixNova. All rights reserved.</p>
         <span className="text-amber-400 font-semibold tracking-wide">Innovation Driven By Data</span>
       </footer>
-    </div>
+    </PresentationLayout>
   );
 }

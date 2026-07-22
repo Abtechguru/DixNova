@@ -8,20 +8,21 @@ import {
   ShieldCheck, 
   FileText, 
   Bus, 
-  DollarSign
+  DollarSign,
+  Sparkles
 } from 'lucide-react';
 import dix0Img from '@/app/public/dix0.jpeg';
 import bgImg from '@/app/public/bg.jpg';
 
 export default function Home() {
   return (
-    <div className="h-screen w-screen bg-slate-950 text-slate-100 flex flex-col justify-between overflow-hidden relative selection:bg-amber-500 selection:text-white font-sans">
+    <div className="h-screen w-screen bg-slate-950 text-slate-100 flex flex-col justify-between overflow-hidden relative selection:bg-amber-400 selection:text-slate-950 font-sans">
       
       {/* 1. SINGLE PAGE BACKGROUND IMAGE (dix0.jpeg) */}
       <div className="absolute inset-0 z-0 overflow-hidden">
         <Image
           src={dix0Img}
-          alt="Lagos Public Transportation Background"
+          alt="DixNova Public Transportation Background"
           priority
           fill
           sizes="100vw"
@@ -32,12 +33,12 @@ export default function Home() {
         <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-transparent to-slate-950/40 pointer-events-none" />
       </div>
 
-      {/* 2. TOP HEADER WITH bg.jpg AS LOGO AT TOP LEFT CORNER */}
+      {/* 2. TOP HEADER WITH DIXNOVA BRANDING */}
       <header className="relative z-30 px-6 sm:px-12 py-5 max-w-7xl mx-auto w-full flex items-center justify-between">
         
         {/* Brand Logo Using bg.jpg at Top Left Corner */}
         <Link href="/" className="flex items-center gap-3 group">
-          <div className="relative w-12 h-12 sm:w-14 sm:h-14 rounded-2xl overflow-hidden border-2 border-amber-400 shadow-xl group-hover:scale-105 transition-transform bg-slate-900">
+          <div className="relative w-12 h-12 sm:w-14 sm:h-14 rounded-2xl overflow-hidden border-2 border-amber-400 shadow-xl group-hover:scale-105 transition-transform bg-slate-900 shrink-0">
             <Image
               src={bgImg}
               alt="DixNova Logo"
@@ -50,15 +51,22 @@ export default function Home() {
             <span className="text-2xl sm:text-3xl font-black tracking-tight text-white drop-shadow-md">
               Dix<span className="text-amber-400">Nova</span>
             </span>
-            <p className="text-[10px] text-amber-300 font-semibold tracking-wider uppercase">
-              Innovation Driven By Data
+            <p className="text-[10px] text-amber-300 font-bold tracking-wider uppercase flex items-center gap-1">
+              <Sparkles size={11} className="text-amber-400" />
+              <span>Driven by Data</span>
             </p>
           </div>
         </Link>
 
+        <Link href="/admin/login" className="hidden sm:block">
+          <button className="px-4 py-2 rounded-xl bg-slate-900/90 hover:bg-slate-800 text-xs font-bold text-slate-300 border border-slate-800 transition-all cursor-pointer backdrop-blur-md">
+            Admin Portal
+          </button>
+        </Link>
+
       </header>
 
-      {/* 3. CENTER HERO - TEXT REMOVED, EXTREME RIGHT END ACTION BUTTON ONLY */}
+      {/* 3. HERO ACTION BUTTON */}
       <main className="relative z-20 flex-1 w-full max-w-7xl mx-auto px-6 sm:px-12 flex flex-col items-end justify-center pb-8">
         <Link href="/problem-statement" className="self-end">
           <button className="relative group inline-flex items-center justify-center gap-4 px-10 py-4.5 sm:px-12 sm:py-5 rounded-2xl bg-gradient-to-r from-orange-500 via-amber-500 to-orange-600 hover:from-orange-600 hover:to-amber-600 text-white font-black text-lg sm:text-xl shadow-2xl shadow-orange-500/50 hover:shadow-orange-500/80 hover:scale-105 active:scale-95 transition-all duration-300 border border-white/40 backdrop-blur-md overflow-hidden cursor-pointer">
@@ -125,8 +133,8 @@ export default function Home() {
           <Link href="/dashboard" className="hover:text-amber-400 transition-colors">
             Command Center
           </Link>
-          <span className="text-amber-400 font-semibold tracking-wide">
-            Innovation Driven by Data
+          <span className="text-amber-400 font-bold tracking-wide font-mono">
+            Driven by Data
           </span>
         </div>
       </footer>

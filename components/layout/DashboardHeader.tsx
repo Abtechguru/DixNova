@@ -1,6 +1,6 @@
 "use client"
 import React from 'react';
-import { Search, Bell, RefreshCw, Download, MapPin } from 'lucide-react';
+import { Search, Bell, RefreshCw, Download, MapPin, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 
 interface DashboardHeaderProps {
@@ -17,22 +17,30 @@ export function DashboardHeader({
   onRefresh
 }: DashboardHeaderProps) {
   return (
-    <header className="h-16 border-b border-slate-800/80 bg-navy-950/80 backdrop-blur-md px-6 flex items-center justify-between sticky top-0 z-20">
+    <header className="h-16 border-b border-slate-800/80 bg-navy-950/80 backdrop-blur-md px-6 flex items-center justify-between sticky top-0 z-20 font-sans">
       <div className="flex items-center gap-4">
         <div>
-          <h1 className="text-lg font-bold text-white tracking-tight">{title}</h1>
-          <p className="text-[10px] text-emerald-400 font-medium tracking-wide">DixNova • Innovation driven by data</p>
+          <div className="flex items-center gap-2">
+            <h1 className="text-base font-black text-white tracking-tight">{title}</h1>
+            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-400/20 text-amber-300 font-bold border border-amber-400/30 hidden sm:inline">
+              DixNova
+            </span>
+          </div>
+          <p className="text-[10px] text-amber-400 font-medium tracking-wide flex items-center gap-1">
+            <Sparkles size={11} className="text-amber-400" />
+            <span>Driven by Data</span>
+          </p>
         </div>
 
         {/* State Filter Selector */}
         <div className="hidden lg:flex items-center gap-2 pl-4 border-l border-slate-800">
-          <MapPin size={14} className="text-slate-400" />
+          <MapPin size={14} className="text-amber-400" />
           <select 
             value={selectedState} 
             onChange={(e) => onStateChange?.(e.target.value)}
-            className="bg-slate-900 border border-slate-800 text-slate-200 text-xs rounded-lg px-2.5 py-1 focus:outline-none focus:border-blue-500 font-semibold cursor-pointer hover:border-slate-700 transition-all"
+            className="bg-slate-900 border border-slate-800 text-slate-200 text-xs rounded-lg px-2.5 py-1 focus:outline-none focus:border-amber-400 font-semibold cursor-pointer hover:border-slate-700 transition-all"
           >
-            <option value="Lagos State (LAMATA)">Lagos State (LAMATA)</option>
+            <option value="Lagos State (LAMATA)">Lagos State (LAMATA / BRT)</option>
             <option value="Abuja FCT (Central Transit)">Abuja FCT (Central Transit)</option>
             <option value="Rivers State Transit Authority">Rivers State Transit Authority</option>
             <option value="Kano Line Metro">Kano Line Metro</option>
@@ -48,24 +56,24 @@ export function DashboardHeader({
           <input 
             type="text" 
             placeholder="Search corridors, buses, telemetry..." 
-            className="w-56 bg-slate-900/80 border border-slate-800 rounded-xl pl-8 pr-3 py-1.5 text-xs text-slate-200 placeholder:text-slate-500 focus:outline-none focus:border-blue-500 transition-all"
+            className="w-56 bg-slate-900/80 border border-slate-800 rounded-xl pl-8 pr-3 py-1.5 text-xs text-slate-200 placeholder:text-slate-500 focus:outline-none focus:border-amber-400 transition-all"
           />
         </div>
 
-        <Button onClick={onRefresh} variant="outline" size="sm" className="hidden sm:flex gap-1.5 text-xs">
+        <Button onClick={onRefresh} variant="outline" size="sm" className="hidden sm:flex gap-1.5 text-xs border-slate-800 hover:border-amber-400/50">
           <RefreshCw size={13} className="text-emerald-400" />
-          <span>Refresh API</span>
+          <span>Refresh Data</span>
         </Button>
 
-        <Button variant="outline" size="sm" className="hidden sm:flex gap-1.5 text-xs">
+        <Button variant="outline" size="sm" className="hidden sm:flex gap-1.5 text-xs border-slate-800">
           <Download size={13} />
-          <span>Export Data</span>
+          <span>Export Reports</span>
         </Button>
 
         <div className="relative">
           <button className="w-8 h-8 rounded-lg bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-300 hover:text-white relative">
             <Bell size={16} />
-            <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-emerald-400"></span>
+            <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-amber-400"></span>
           </button>
         </div>
       </div>

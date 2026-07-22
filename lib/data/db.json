@@ -1,20 +1,17 @@
 {
   "team": [
     {
-      "id": "1",
-      "name": "Vanessa Kirby",
-      "role": "Lead Data Scientist & DAX Architect",
-      "bio": "Architect of DixNova GTFS data modeling, Power Query transformations, and predictive passenger demand forecasting.",
-      "photoUrl": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&auto=format&fit=crop&q=80",
-      "skills": ["Power BI", "DAX", "Python", "SQL Server"]
-    },
-    {
       "id": "2",
       "name": "Olumide Adebayo",
       "role": "Senior Frontend & Telemetry Architect",
       "bio": "Enterprise Data Visualizations & Realtime Systems Specialist driving front-end UI excellence.",
       "photoUrl": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&auto=format&fit=crop&q=80",
-      "skills": ["React", "Next.js", "Tailwind CSS", "TypeScript"]
+      "skills": [
+        "React",
+        "Next.js",
+        "Tailwind CSS",
+        "TypeScript"
+      ]
     },
     {
       "id": "3",
@@ -22,7 +19,11 @@
       "role": "Transport Operations Lead",
       "bio": "Municipal Transit Analytics & Corridor Optimization Director focusing on Lagos BRT efficiency.",
       "photoUrl": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=800&auto=format&fit=crop&q=80",
-      "skills": ["Transit Analytics", "Fleet Telemetry", "LAMATA Systems"]
+      "skills": [
+        "Transit Analytics",
+        "Fleet Telemetry",
+        "LAMATA Systems"
+      ]
     },
     {
       "id": "4",
@@ -30,7 +31,11 @@
       "role": "Product Strategy & UX Lead",
       "bio": "Public Transportation Design Systems & User Experience Architect creating accessible command centers.",
       "photoUrl": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800&auto=format&fit=crop&q=80",
-      "skills": ["Figma", "UX Research", "Design Systems"]
+      "skills": [
+        "Figma",
+        "UX Research",
+        "Design Systems"
+      ]
     },
     {
       "id": "5",
@@ -38,7 +43,11 @@
       "role": "Senior Transit Policy Advisor",
       "bio": "Federal Ministry Transport Policy & Smart City Infrastructure Advisor overseeing national corridors.",
       "photoUrl": "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=800&auto=format&fit=crop&q=80",
-      "skills": ["Policy Strategy", "Municipal Transit", "Federal Standards"]
+      "skills": [
+        "Policy Strategy",
+        "Municipal Transit",
+        "Federal Standards"
+      ]
     },
     {
       "id": "6",
@@ -46,7 +55,11 @@
       "role": "Data Infrastructure Advisor",
       "bio": "Big Data Architecture & Azure Cloud Integration Specialist providing high-capacity data lake frameworks.",
       "photoUrl": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=800&auto=format&fit=crop&q=80",
-      "skills": ["Azure Data Lake", "Fabric BI", "Big Data"]
+      "skills": [
+        "Azure Data Lake",
+        "Fabric BI",
+        "Big Data"
+      ]
     },
     {
       "id": "7",
@@ -54,7 +67,11 @@
       "role": "Financial Systems Advisor",
       "bio": "Automated Fare Collection & Revenue Audit Compliance Expert for digital ticketing systems.",
       "photoUrl": "https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?w=800&auto=format&fit=crop&q=80",
-      "skills": ["Fare Auditing", "Digital Payments", "Financial Control"]
+      "skills": [
+        "Fare Auditing",
+        "Digital Payments",
+        "Financial Control"
+      ]
     }
   ],
   "problems": [
@@ -72,7 +89,11 @@
       "title": "MANUAL FARE LEAKAGE",
       "category": "Financial Deficit",
       "description": "Paper ticketing & un-audited cash collection cause up to 25% revenue loss across municipal BRT corridors.",
-      "details": ["No digital audit trail", "Cash handling vulnerability", "Underfunded transit budget"],
+      "details": [
+        "No digital audit trail",
+        "Cash handling vulnerability",
+        "Underfunded transit budget"
+      ],
       "iconName": "DollarSign",
       "color": "from-red-500 to-amber-600",
       "badgeColor": "text-red-400 border-red-500/30 bg-red-500/10"
@@ -140,7 +161,7 @@
   ],
   "settings": {
     "telemetryEnabled": true,
-    "teamAutoPlay": true,
+    "teamAutoPlay": false,
     "maintenanceAlerts": true,
     "liveFareAudit": true,
     "problemJourneyPublic": true,

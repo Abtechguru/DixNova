@@ -6,7 +6,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "DixNova | Public Transportation Intelligence Platform",
-  description: "Innovation driven by data - Advanced analytics for public transport authorities.",
+  description: "Driven by Data — Advanced Public Transportation Analytics & Command Center by DixNova.",
 };
 
 export default function RootLayout({
@@ -15,8 +15,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
-      <body className={`${inter.className} bg-navy-950 text-slate-100 antialiased selection:bg-primary selection:text-white`}>
+    <html lang="en" className="dark" suppressHydrationWarning>
+      <body 
+        suppressHydrationWarning 
+        className={`${inter.className} bg-navy-950 text-slate-100 antialiased selection:bg-amber-400 selection:text-slate-950`}
+      >
         {children}
       </body>
     </html>

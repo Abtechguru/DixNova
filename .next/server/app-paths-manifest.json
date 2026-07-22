@@ -1,4 +1,13 @@
 {
   "/page": "app/page.js",
-  "/problem-statement/page": "app/problem-statement/page.js"
+  "/api/admin/team/route": "app/api/admin/team/route.js",
+  "/api/admin/problems/route": "app/api/admin/problems/route.js",
+  "/api/admin/settings/route": "app/api/admin/settings/route.js",
+  "/api/admin/data/route": "app/api/admin/data/route.js",
+  "/problem-statement/page": "app/problem-statement/page.js",
+  "/admin/page": "app/admin/page.js",
+  "/admin/settings/page": "app/admin/settings/page.js",
+  "/admin/team/page": "app/admin/team/page.js",
+  "/admin/data/page": "app/admin/data/page.js",
+  "/admin/problems/page": "app/admin/problems/page.js"
 }

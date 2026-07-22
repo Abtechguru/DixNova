@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Sidebar } from '@/components/layout/Sidebar';
 import { DashboardHeader } from '@/components/layout/DashboardHeader';
+import { JudgesNavigation } from '@/components/layout/JudgesNavigation';
 import { 
   Users, 
   DollarSign, 
@@ -146,6 +147,7 @@ export default function DashboardPage() {
       <Sidebar />
 
       <div className="flex-1 flex flex-col min-w-0 overflow-y-auto">
+        <JudgesNavigation />
         <DashboardHeader 
           title="Executive Command Center"
           selectedState={selectedState}
