@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "postinstall": "prisma generate",
-    "build": "prisma generate && node scripts/copy-assets.js && next build",
+    "postinstall": "node scripts/clean-route-conflict.js && prisma generate",
+    "build": "node scripts/clean-route-conflict.js && prisma generate && node scripts/copy-assets.js && next build",
     "start": "next start",
     "lint": "next lint"
   },

@@ -1,84 +1,74 @@
 {
   "app\\presentation\\page.tsx -> @/components/cms/AnalyticsMaturityJourney": {
-    "id": 6023,
+    "id": "app\\presentation\\page.tsx -> @/components/cms/AnalyticsMaturityJourney",
     "files": [
-      "static/chunks/6023.39171e658e559470.js"
+      "static/chunks/_app-pages-browser_components_cms_AnalyticsMaturityJourney_tsx.js"
     ]
   },
   "app\\presentation\\page.tsx -> @/components/cms/BiggerRealityVideoStage": {
-    "id": 59279,
+    "id": "app\\presentation\\page.tsx -> @/components/cms/BiggerRealityVideoStage",
     "files": [
-      "static/chunks/3098-04d0012d9c9b8f4e.js",
-      "static/chunks/8059-2ca7e4b3d3a32660.js",
-      "static/chunks/9279.a8edd43e84f96896.js"
+      "static/chunks/_app-pages-browser_components_cms_BiggerRealityVideoStage_tsx.js"
     ]
   },
   "app\\presentation\\page.tsx -> @/components/cms/BusinessUnderstandingStage": {
-    "id": 42099,
+    "id": "app\\presentation\\page.tsx -> @/components/cms/BusinessUnderstandingStage",
     "files": [
-      "static/chunks/3098-04d0012d9c9b8f4e.js",
-      "static/chunks/2099.f4cdeb80fa1b71bb.js"
+      "static/chunks/_app-pages-browser_components_cms_BusinessUnderstandingStage_tsx.js"
     ]
   },
   "app\\presentation\\page.tsx -> @/components/cms/DataCleaningStage": {
-    "id": 23113,
+    "id": "app\\presentation\\page.tsx -> @/components/cms/DataCleaningStage",
     "files": [
-      "static/chunks/3113.85b1013234b0da57.js"
+      "static/chunks/_app-pages-browser_components_cms_DataCleaningStage_tsx.js"
     ]
   },
   "app\\presentation\\page.tsx -> @/components/cms/DataModelingStage": {
-    "id": 56091,
+    "id": "app\\presentation\\page.tsx -> @/components/cms/DataModelingStage",
     "files": [
-      "static/chunks/3098-04d0012d9c9b8f4e.js",
-      "static/chunks/6091.b45003259cd5dedb.js"
+      "static/chunks/_app-pages-browser_components_cms_DataModelingStage_tsx.js"
     ]
   },
   "app\\presentation\\page.tsx -> @/components/cms/DataPreparationStage": {
-    "id": 44185,
+    "id": "app\\presentation\\page.tsx -> @/components/cms/DataPreparationStage",
     "files": [
-      "static/chunks/4185.e7c447f856b57e4c.js"
+      "static/chunks/_app-pages-browser_components_cms_DataPreparationStage_tsx.js"
     ]
   },
   "app\\presentation\\page.tsx -> @/components/cms/DataUnderstandingStage": {
-    "id": 46020,
+    "id": "app\\presentation\\page.tsx -> @/components/cms/DataUnderstandingStage",
     "files": [
-      "static/chunks/3098-04d0012d9c9b8f4e.js",
-      "static/chunks/6020.b62dd928d1f0ab50.js"
+      "static/chunks/_app-pages-browser_components_cms_DataUnderstandingStage_tsx.js"
     ]
   },
   "app\\presentation\\page.tsx -> @/components/cms/ExecutiveSummaryStage": {
-    "id": 96104,
+    "id": "app\\presentation\\page.tsx -> @/components/cms/ExecutiveSummaryStage",
     "files": [
-      "static/chunks/3098-04d0012d9c9b8f4e.js",
-      "static/chunks/6104.c54dbd81f9a5b598.js"
+      "static/chunks/_app-pages-browser_components_cms_ExecutiveSummaryStage_tsx.js"
     ]
   },
   "app\\presentation\\page.tsx -> @/components/cms/PresentationPowerBiStage": {
-    "id": 92674,
+    "id": "app\\presentation\\page.tsx -> @/components/cms/PresentationPowerBiStage",
     "files": [
-      "static/chunks/3098-04d0012d9c9b8f4e.js",
-      "static/chunks/61-764457a6693fc55e.js",
-      "static/chunks/411-1d77f7241742cc2a.js",
-      "static/chunks/2674.6ac630cb5a50f511.js"
+      "static/chunks/_app-pages-browser_components_cms_PresentationPowerBiStage_tsx.js"
     ]
   },
   "app\\presentation\\page.tsx -> @/components/cms/ProblemStatement5Ws": {
-    "id": 26093,
+    "id": "app\\presentation\\page.tsx -> @/components/cms/ProblemStatement5Ws",
     "files": [
-      "static/chunks/6093.d259efdf10f104d5.js"
+      "static/chunks/_app-pages-browser_components_cms_ProblemStatement5Ws_tsx.js"
     ]
   },
   "app\\presentation\\page.tsx -> @/components/cms/ProjectObjectivesGrid": {
-    "id": 13318,
+    "id": "app\\presentation\\page.tsx -> @/components/cms/ProjectObjectivesGrid",
     "files": [
-      "static/chunks/3098-04d0012d9c9b8f4e.js",
-      "static/chunks/3318.9b22d2f9ba3ff1a1.js"
+      "static/chunks/_app-pages-browser_components_cms_ProjectObjectivesGrid_tsx.js"
     ]
   },
   "app\\presentation\\page.tsx -> @/components/cms/TeamMembersGrid": {
-    "id": 74127,
+    "id": "app\\presentation\\page.tsx -> @/components/cms/TeamMembersGrid",
     "files": [
-      "static/chunks/4127.62b69ca3580e678f.js"
+      "static/chunks/_app-pages-browser_components_cms_TeamMembersGrid_tsx.js"
     ]
   }
 }
