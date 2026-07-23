@@ -69,15 +69,18 @@ export function PowerBiZipVisualizer({ reportData }: { reportData?: ZipReportDat
   const [selectedPageIndex, setSelectedPageIndex] = React.useState<number>(0)
   const [searchTerm, setSearchTerm] = React.useState<string>("")
 
-  const parsedPages = [
-    { id: "page1", name: "page1", displayName: "Page 1: Executive Summary", visualCount: 4 },
-    { id: "page2", name: "page2", displayName: "Page 2: Demand & Fleet Reallocation", visualCount: 5 },
-    { id: "page3", name: "page3", displayName: "Page 3: Schedule & Delay Performance", visualCount: 5 },
-    { id: "page4", name: "page4", displayName: "Page 4: Revenue & Profit Leak", visualCount: 4 },
-    { id: "page5", name: "page5", displayName: "Page 5: Maintenance Performance", visualCount: 5 }
+  // Executive Bookmark Pages
+  const reportPages = [
+    { id: "page1", name: "page1", displayName: "🏠 Executive Summary", icon: "home" },
+    { id: "page2", name: "page2", displayName: "👥 Passenger Analytics", icon: "user" },
+    { id: "page3", name: "page3", displayName: "🚌 Fleet Analytics", icon: "bus" },
+    { id: "page4", name: "page4", displayName: "💰 Revenue Analytics", icon: "dollar" },
+    { id: "page5", name: "page5", displayName: "🔧 Maintenance Analytics", icon: "wrench" },
+    { id: "page6", name: "page6", displayName: "📍 Route Performance", icon: "map" },
+    { id: "page7", name: "page7", displayName: "💡 Recommendations", icon: "target" }
   ]
 
-  // REAL DATA FROM HACKATHON GROUP 10 POWER BI REPORT
+  // VERIFIED REAL DATA FROM TEAM DIXNOVA POWER BI REPORT (2022–2024)
   const realRecords = React.useMemo(() => {
     return [
       { date: "07:00 AM", corridor: "Surulere - Oshodi", trips: 18500, revenueNgn: 14200000, maintenanceCostNgn: 31200000, delayMinutes: 8, fareType: "Morning Peak Surge", peakHour: "7:00 AM" },
@@ -109,24 +112,18 @@ export function PowerBiZipVisualizer({ reportData }: { reportData?: ZipReportDat
     })
   }, [realRecords, selectedCorridor, selectedFareType, searchTerm])
 
-  // Real Power BI Extracted KPI Totals (2022 - 2024)
-  const realKpis = {
-    totalBuses: 400,
-    activeBuses: 323,
-    maintenanceBuses: 52,
-    outOfServiceBuses: 25,
-    fleetAvailabilityPct: 81,
-    passengersCarried: 131000,
-    ticketRevenueNgn: 70.6, // Millions
-    maintenanceCostNgn: 159.8, // Millions
-    netOperatingLossNgn: 89.2 // Millions Loss
+  // Reset Filters Handler
+  const handleResetFilters = () => {
+    setSelectedCorridor("ALL")
+    setSelectedFareType("ALL")
+    setSearchTerm("")
   }
 
   // Fleet Status Pie Breakdown
   const fleetBreakdown = [
-    { name: "Active Fleet (Deployable)", value: 323, color: "#10b981" },
-    { name: "Under Maintenance", value: 52, color: "#FFFF00" },
-    { name: "Out of Service", value: 25, color: "#ef4444" }
+    { name: "Active Fleet (323 Buses)", value: 323, color: "#10b981" },
+    { name: "Under Maintenance (52 Buses)", value: 52, color: "#FFFF00" },
+    { name: "Out of Service (25 Buses)", value: 25, color: "#ef4444" }
   ]
 
   // Financial Leakage Chart Data
@@ -147,28 +144,28 @@ export function PowerBiZipVisualizer({ reportData }: { reportData?: ZipReportDat
   return (
     <div className="w-full rounded-3xl bg-[#07111F]/95 border border-white/10 p-4 sm:p-6 space-y-6 shadow-2xl backdrop-blur-xl my-2">
       
-      {/* HEADER BAR */}
+      {/* POWER BI SHOWCASE EXECUTIVE HEADER BAR */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-white/10 pb-4">
         <div className="flex items-center gap-3">
-          <div className="h-10 w-10 rounded-2xl bg-[#FFFF00] text-[#07111F] font-black flex items-center justify-center shadow-lg shrink-0">
+          <div className="h-10 w-10 rounded-2xl bg-[#FFFF00] text-[#07111F] font-black flex items-center justify-center shadow-[0_0_25px_rgba(255,255,0,0.4)] shrink-0">
             <Icons.powerbi className="h-6 w-6" />
           </div>
           <div>
             <div className="flex items-center gap-2">
               <h2 className="text-base sm:text-lg font-display font-extrabold text-white tracking-tight">
-                SmartMove Nigeria Power BI Executive Audit (2022–2024)
+                SmartMove Nigeria • Public Transportation Analytics
               </h2>
               <Badge variant="default" className="bg-[#FFFF00] text-[#07111F] font-mono text-[9px] font-black">
-                REAL VERIFIED DATA
+                POWER BI SHOWCASE
               </Badge>
             </div>
             <p className="text-xs text-foreground-secondary font-mono">
-              400 Fleet Buses • 131,000+ Passengers • ₦70.6M Revenue vs ₦159.8M Maintenance
+              Team DixNova • Authoritative Submission • Data Horizon: Jan 2022 – Dec 2024
             </p>
           </div>
         </div>
 
-        {/* Mode Tabs */}
+        {/* View Mode Switcher Tabs */}
         <div className="flex items-center gap-1.5 bg-[#162133] p-1 rounded-xl border border-white/15 overflow-x-auto scrollbar-none">
           <button
             onClick={() => setActiveTab("visuals")}
@@ -184,7 +181,7 @@ export function PowerBiZipVisualizer({ reportData }: { reportData?: ZipReportDat
               activeTab === "interpretation" ? "bg-[#FFFF00] text-[#07111F] shadow-md" : "text-gray-300 hover:text-white"
             }`}
           >
-            🧠 Executive Interpretation
+            🧠 4-Question Executive Story
           </button>
           <button
             onClick={() => setActiveTab("recommendations")}
@@ -192,17 +189,17 @@ export function PowerBiZipVisualizer({ reportData }: { reportData?: ZipReportDat
               activeTab === "recommendations" ? "bg-[#FFFF00] text-[#07111F] shadow-md" : "text-gray-300 hover:text-white"
             }`}
           >
-            💡 Actionable Recommendations
+            💡 Actionable Proposals
           </button>
         </div>
       </div>
 
-      {/* DYNAMIC EXTRACTED POWER BI PAGE TABS */}
+      {/* EXECUTIVE BOOKMARK NAVIGATION TABS */}
       <div className="flex items-center gap-2 overflow-x-auto scrollbar-none pb-1">
-        <span className="text-[10px] font-mono text-amber-300 font-bold uppercase shrink-0">Power BI Page:</span>
-        {parsedPages.map((page, idx) => (
+        <span className="text-[10px] font-mono text-[#FFFF00] font-bold uppercase shrink-0">Report Bookmark:</span>
+        {reportPages.map((page, idx) => (
           <button
-            key={page.id || idx}
+            key={page.id}
             onClick={() => setSelectedPageIndex(idx)}
             className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap ${
               idx === selectedPageIndex
@@ -210,27 +207,40 @@ export function PowerBiZipVisualizer({ reportData }: { reportData?: ZipReportDat
                 : "bg-[#162133] border border-white/10 text-gray-300 hover:text-white"
             }`}
           >
-            📄 {page.displayName}
+            {page.displayName}
           </button>
         ))}
       </div>
 
-      {/* SLICERS & FILTERS BAR */}
+      {/* POWER BI INTERACTIVE SLICERS & FILTERS BAR */}
       <div className="p-4 rounded-2xl bg-[#162133]/90 border border-white/15 space-y-3 shadow-lg">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 text-xs font-bold font-mono text-[#FFFF00] uppercase">
             <Icons.search className="h-4 w-4" />
-            <span>Interactive Power BI Slicers & Route Filters</span>
+            <span>Power BI Interactive Slicers & Route Filters</span>
           </div>
-          <span className="text-[11px] font-mono text-foreground-secondary">
-            Active Filter: {filteredRecords.length} of {realRecords.length} Routes
-          </span>
+
+          <div className="flex items-center gap-3">
+            <span className="text-[11px] font-mono text-gray-300 hidden sm:inline">
+              Active Slice: <strong className="text-[#FFFF00]">{filteredRecords.length}</strong> / {realRecords.length} Routes
+            </span>
+
+            {/* Reset Filters Button */}
+            {(selectedCorridor !== "ALL" || selectedFareType !== "ALL" || searchTerm !== "") && (
+              <button
+                onClick={handleResetFilters}
+                className="px-2.5 py-1 rounded-lg bg-[#FFFF00]/10 border border-[#FFFF00]/40 text-[#FFFF00] hover:bg-[#FFFF00] hover:text-[#07111F] text-[11px] font-mono font-bold transition-all"
+              >
+                ↺ Reset All Filters
+              </button>
+            )}
+          </div>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           {/* Corridor Slicer */}
           <div className="space-y-1">
-            <label className="text-[11px] font-mono font-bold text-amber-300">Slicer: Transport Route</label>
+            <label className="text-[11px] font-mono font-bold text-amber-300">Slicer: Transport Route / Corridor</label>
             <select
               value={selectedCorridor}
               onChange={(e) => setSelectedCorridor(e.target.value)}
@@ -245,7 +255,7 @@ export function PowerBiZipVisualizer({ reportData }: { reportData?: ZipReportDat
 
           {/* Demand Profile Slicer */}
           <div className="space-y-1">
-            <label className="text-[11px] font-mono font-bold text-amber-300">Slicer: Demand Profile</label>
+            <label className="text-[11px] font-mono font-bold text-amber-300">Slicer: Demand Peak Characteristic</label>
             <select
               value={selectedFareType}
               onChange={(e) => setSelectedFareType(e.target.value)}
@@ -258,7 +268,7 @@ export function PowerBiZipVisualizer({ reportData }: { reportData?: ZipReportDat
             </select>
           </div>
 
-          {/* Quick Search Slicer */}
+          {/* Quick Search Query */}
           <div className="space-y-1">
             <label className="text-[11px] font-mono font-bold text-amber-300">Search Route Query</label>
             <input
@@ -272,18 +282,18 @@ export function PowerBiZipVisualizer({ reportData }: { reportData?: ZipReportDat
         </div>
       </div>
 
-      {/* REAL POWER BI EXECUTIVE KPIS BAR */}
+      {/* EXECUTIVE KPI SUMMARY CARDS */}
       <div className="grid grid-cols-2 lg:grid-cols-5 gap-3">
         <div className="p-4 rounded-2xl bg-[#162133] border border-sky-500/30 space-y-1">
           <span className="text-[10px] font-mono text-sky-400 font-bold block">TOTAL PASSENGERS</span>
           <span className="text-xl sm:text-2xl font-display font-black text-white">131,000+</span>
-          <span className="text-[10px] text-foreground-secondary block">2022–2024 Total Volume</span>
+          <span className="text-[10px] text-foreground-secondary block">2022–2024 Verified Volume</span>
         </div>
 
         <div className="p-4 rounded-2xl bg-[#162133] border border-emerald-500/30 space-y-1">
           <span className="text-[10px] font-mono text-emerald-400 font-bold block">TICKET REVENUE</span>
           <span className="text-xl sm:text-2xl font-display font-black text-white">₦70.6M</span>
-          <span className="text-[10px] text-foreground-secondary block">Peaked in 2022 (Declining)</span>
+          <span className="text-[10px] text-foreground-secondary block">Peaked 2022 (Declining)</span>
         </div>
 
         <div className="p-4 rounded-2xl bg-[#162133] border border-rose-500/30 space-y-1">
@@ -295,7 +305,7 @@ export function PowerBiZipVisualizer({ reportData }: { reportData?: ZipReportDat
         <div className="p-4 rounded-2xl bg-[#162133] border border-amber-500/30 space-y-1">
           <span className="text-[10px] font-mono text-amber-400 font-bold block">FLEET AVAILABILITY</span>
           <span className="text-xl sm:text-2xl font-display font-black text-white">81% (323/400)</span>
-          <span className="text-[10px] text-foreground-secondary block">Deployable Daily Fleet</span>
+          <span className="text-[10px] text-foreground-secondary block">Deployable Active Buses</span>
         </div>
 
         <div className="p-4 rounded-2xl bg-[#162133] border border-purple-500/30 space-y-1 col-span-2 lg:col-span-1">
@@ -305,12 +315,12 @@ export function PowerBiZipVisualizer({ reportData }: { reportData?: ZipReportDat
         </div>
       </div>
 
-      {/* 5 VERIFIED POWER BI VISUALIZATIONS WITH DEDICATED INSIGHT CARDS */}
+      {/* 5 VERIFIED POWER BI VISUALIZATIONS WITH 4-QUESTION STORYTELLING */}
       {activeTab === "visuals" && (
         <div className="space-y-8">
           
-          {/* VISUAL 01: Executive Summary - Revenue vs Maintenance Deficit */}
-          <div className="p-5 rounded-2xl bg-[#162133] border border-white/10 space-y-4">
+          {/* VISUAL 01: Ticket Revenue vs Maintenance Operating Loss */}
+          <div className="p-5 sm:p-6 rounded-2xl bg-[#162133] border border-white/10 space-y-4 shadow-xl">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 border-b border-white/10 pb-3">
               <div>
                 <div className="flex items-center gap-2">
@@ -322,12 +332,12 @@ export function PowerBiZipVisualizer({ reportData }: { reportData?: ZipReportDat
                 <p className="text-xs text-foreground-secondary pt-0.5">3-Year financial audit showing operational cost exceeding ticket revenue by ₦89.2 Million</p>
               </div>
               <Badge variant="outline" className="text-[10px] text-[#FFFF00] border-[#FFFF00]/40 font-mono">
-                FINANCIAL PROFIT LEAK
+                PROFIT LEAK DAX
               </Badge>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
-              <div className="lg:col-span-8 h-64 w-full">
+              <div className="lg:col-span-7 h-64 w-full">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={financialLeakageData} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
                     <CartesianGrid strokeDasharray="3 3" opacity={0.15} />
@@ -340,28 +350,38 @@ export function PowerBiZipVisualizer({ reportData }: { reportData?: ZipReportDat
                 </ResponsiveContainer>
               </div>
 
-              {/* Dedicated Insight Card 01 */}
-              <div className="lg:col-span-4 p-4 rounded-xl bg-[#07111F] border border-[#FFFF00]/30 space-y-2">
+              {/* 4-Question Storytelling Panel 01 */}
+              <div className="lg:col-span-5 p-4.5 rounded-2xl bg-[#07111F] border border-[#FFFF00]/30 space-y-2">
                 <div className="flex items-center gap-2 text-xs font-mono font-bold text-[#FFFF00]">
                   <Icons.brain className="h-4 w-4" />
-                  <span>EXECUTIVE INSIGHT 01</span>
+                  <span>4-QUESTION INSIGHT PANEL 01</span>
                 </div>
-                <h4 className="text-xs font-bold text-white">Critical Maintenance Deficit</h4>
-                <p className="text-xs text-gray-300 leading-relaxed font-sans">
-                  SmartMove generated <strong className="text-emerald-400">₦70.6M revenue</strong> against <strong className="text-rose-400">₦159.8M maintenance costs</strong>. Revenue peaked in 2022 and has steadily declined. Maintenance is the single largest operational expense eroding profitability.
-                </p>
+                <div className="space-y-1.5 text-xs">
+                  <p className="text-gray-300 leading-tight">
+                    <strong className="text-white">What is happening?</strong> SmartMove generated ₦70.6M revenue against ₦159.8M maintenance costs (₦89.2M net deficit).
+                  </p>
+                  <p className="text-gray-300 leading-tight">
+                    <strong className="text-white">Why is it happening?</strong> Revenue peaked in 2022 and has declined while maintenance escalated across aged buses.
+                  </p>
+                  <p className="text-gray-300 leading-tight">
+                    <strong className="text-white">Why does it matter?</strong> Every top 5 busiest route operates at a loss once maintenance is factored in.
+                  </p>
+                  <p className="text-gray-300 leading-tight">
+                    <strong className="text-[#FFFF00]">What to do next?</strong> Implement 5,000 km preventive maintenance and evaluate third-party repair contractors.
+                  </p>
+                </div>
               </div>
             </div>
           </div>
 
-          {/* VISUAL 02: Demand & Fleet Reallocation - Peak Hour Staggered Schedule */}
-          <div className="p-5 rounded-2xl bg-[#162133] border border-white/10 space-y-4">
+          {/* VISUAL 02: Demand & Fleet Reallocation */}
+          <div className="p-5 sm:p-6 rounded-2xl bg-[#162133] border border-white/10 space-y-4 shadow-xl">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 border-b border-white/10 pb-3">
               <div>
                 <div className="flex items-center gap-2">
                   <span className="h-2.5 w-2.5 rounded-full bg-[#10b981]" />
                   <h3 className="text-sm sm:text-base font-bold font-display text-white">
-                    02. Demand & Fleet Reallocation Opportunity (81% Active Availability)
+                    02. Demand & Fleet Reallocation (81% Active Availability)
                   </h3>
                 </div>
                 <p className="text-xs text-foreground-secondary pt-0.5 font-mono">Surulere & Apapa peak at 7am vs Yaba - Epe late peak at 9pm</p>
@@ -372,7 +392,7 @@ export function PowerBiZipVisualizer({ reportData }: { reportData?: ZipReportDat
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
-              <div className="lg:col-span-8 h-64 w-full">
+              <div className="lg:col-span-7 h-64 w-full">
                 <ResponsiveContainer width="100%" height="100%">
                   <AreaChart data={filteredRecords} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                     <defs>
@@ -385,33 +405,43 @@ export function PowerBiZipVisualizer({ reportData }: { reportData?: ZipReportDat
                     <XAxis dataKey="name" tick={{ fontSize: 10, fill: "#cbd5e1" }} />
                     <YAxis tick={{ fontSize: 10, fill: "#cbd5e1" }} />
                     <Tooltip contentStyle={{ backgroundColor: "#07111F", borderRadius: "12px", border: "1px solid #334155", color: "#fff", fontSize: "12px" }} />
-                    <Area type="monotone" dataKey="trips" stroke="#10b981" strokeWidth={2.5} fillOpacity={1} fill="url(#colorRealloc)" name="Passenger Demand Volume" />
+                    <Area type="monotone" dataKey="trips" stroke="#10b981" strokeWidth={2.5} fillOpacity={1} fill="url(#colorRealloc)" name="Passenger Volume" />
                   </AreaChart>
                 </ResponsiveContainer>
               </div>
 
-              {/* Dedicated Insight Card 02 */}
-              <div className="lg:col-span-4 p-4 rounded-xl bg-[#07111F] border border-emerald-500/30 space-y-2">
+              {/* 4-Question Storytelling Panel 02 */}
+              <div className="lg:col-span-5 p-4.5 rounded-2xl bg-[#07111F] border border-emerald-500/30 space-y-2">
                 <div className="flex items-center gap-2 text-xs font-mono font-bold text-emerald-400">
                   <Icons.brain className="h-4 w-4" />
-                  <span>INSIGHT 02: FLEET REALLOCATION</span>
+                  <span>4-QUESTION INSIGHT PANEL 02</span>
                 </div>
-                <h4 className="text-xs font-bold text-white">Smarter Deployment, Not More Buses</h4>
-                <p className="text-xs text-gray-300 leading-relaxed font-sans">
-                  <strong className="text-white">Surulere-Oshodi</strong> and <strong className="text-white">Apapa-Lekki</strong> peak at 7am, while <strong className="text-white">Yaba-Epe</strong> peaks at 9pm. Buses can serve both routes on a staggered schedule. <strong className="text-emerald-400">Agege - Mile 12</strong> is highest volume; Oshodi Depot alone runs 88 buses.
-                </p>
+                <div className="space-y-1.5 text-xs">
+                  <p className="text-gray-300 leading-tight">
+                    <strong className="text-white">What is happening?</strong> Surulere & Apapa peak at 7am; Yaba-Epe peaks at 9pm. Agege-Mile 12 is highest volume.
+                  </p>
+                  <p className="text-gray-300 leading-tight">
+                    <strong className="text-white">Why is it happening?</strong> Commuter work shifts create staggered morning vs evening peak windows.
+                  </p>
+                  <p className="text-gray-300 leading-tight">
+                    <strong className="text-white">Why does it matter?</strong> With 81% fleet active (323 buses), the solution is smarter deployment, not buying more buses.
+                  </p>
+                  <p className="text-gray-300 leading-tight">
+                    <strong className="text-emerald-400">What to do next?</strong> Reallocate buses between 7am and 9pm routes on a staggered daily timetable.
+                  </p>
+                </div>
               </div>
             </div>
           </div>
 
-          {/* VISUAL 03: Fleet Availability & Operational Status (81% Active) */}
-          <div className="p-5 rounded-2xl bg-[#162133] border border-white/10 space-y-4">
+          {/* VISUAL 03: 400 Bus Fleet Availability */}
+          <div className="p-5 sm:p-6 rounded-2xl bg-[#162133] border border-white/10 space-y-4 shadow-xl">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 border-b border-white/10 pb-3">
               <div>
                 <div className="flex items-center gap-2">
                   <span className="h-2.5 w-2.5 rounded-full bg-[#0284c7]" />
                   <h3 className="text-sm sm:text-base font-bold font-display text-white">
-                    03. 400 Bus Fleet Availability & Maintenance Status
+                    03. 400 Bus Fleet Availability & Operational Status
                   </h3>
                 </div>
                 <p className="text-xs text-foreground-secondary pt-0.5 font-mono">323 Active (81%), 52 Under Maintenance, 25 Out of Service</p>
@@ -422,7 +452,7 @@ export function PowerBiZipVisualizer({ reportData }: { reportData?: ZipReportDat
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
-              <div className="lg:col-span-8 h-56 w-full flex items-center justify-center">
+              <div className="lg:col-span-7 h-56 w-full flex items-center justify-center">
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
                     <Pie
@@ -444,28 +474,38 @@ export function PowerBiZipVisualizer({ reportData }: { reportData?: ZipReportDat
                 </ResponsiveContainer>
               </div>
 
-              {/* Dedicated Insight Card 03 */}
-              <div className="lg:col-span-4 p-4 rounded-xl bg-[#07111F] border border-sky-500/30 space-y-2">
+              {/* 4-Question Storytelling Panel 03 */}
+              <div className="lg:col-span-5 p-4.5 rounded-2xl bg-[#07111F] border border-sky-500/30 space-y-2">
                 <div className="flex items-center gap-2 text-xs font-mono font-bold text-sky-400">
                   <Icons.brain className="h-4 w-4" />
-                  <span>INSIGHT 03: FLEET AVAILABILITY</span>
+                  <span>4-QUESTION INSIGHT PANEL 03</span>
                 </div>
-                <h4 className="text-xs font-bold text-white">81% Deployable Availability</h4>
-                <p className="text-xs text-gray-300 leading-relaxed font-sans">
-                  Out of 400 total buses, <strong className="text-emerald-400">323 are active (81%)</strong>, <strong className="text-[#FFFF00]">52 are under maintenance</strong>, and <strong className="text-rose-400">25 are completely out of service</strong>. Restructuring depot servicing will return 30+ buses to active revenue service.
-                </p>
+                <div className="space-y-1.5 text-xs">
+                  <p className="text-gray-300 leading-tight">
+                    <strong className="text-white">What is happening?</strong> 323 buses are active (81%), 52 under maintenance, 25 out of service.
+                  </p>
+                  <p className="text-gray-300 leading-tight">
+                    <strong className="text-white">Why is it happening?</strong> Reactive maintenance delays vehicle turnaround times at major depots like Oshodi (88 buses).
+                  </p>
+                  <p className="text-gray-300 leading-tight">
+                    <strong className="text-white">Why does it matter?</strong> 19% of the fleet is idle, causing commuter overcrowding during peak hours.
+                  </p>
+                  <p className="text-gray-300 leading-tight">
+                    <strong className="text-sky-400">What to do next?</strong> Overhaul depot servicing schedules to restore 30+ buses to active service.
+                  </p>
+                </div>
               </div>
             </div>
           </div>
 
-          {/* VISUAL 04: Schedule & Delay Performance (Dispatch vs Transit Traffic) */}
-          <div className="p-5 rounded-2xl bg-[#162133] border border-white/10 space-y-4">
+          {/* VISUAL 04: Schedule & Delay Performance */}
+          <div className="p-5 sm:p-6 rounded-2xl bg-[#162133] border border-white/10 space-y-4 shadow-xl">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 border-b border-white/10 pb-3">
               <div>
                 <div className="flex items-center gap-2">
                   <span className="h-2.5 w-2.5 rounded-full bg-rose-400" />
                   <h3 className="text-sm sm:text-base font-bold font-display text-white">
-                    04. Schedule & Delay Performance Breakdown (Dispatch vs Transit Traffic)
+                    04. Schedule & Delay Performance (Dispatch vs Transit Traffic)
                   </h3>
                 </div>
                 <p className="text-xs text-foreground-secondary pt-0.5 font-mono">Epe-Berger 19m depot delay vs Ikorodu-Berger 15m traffic delay</p>
@@ -476,7 +516,7 @@ export function PowerBiZipVisualizer({ reportData }: { reportData?: ZipReportDat
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
-              <div className="lg:col-span-8 h-64 w-full">
+              <div className="lg:col-span-7 h-64 w-full">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={delayPerformanceData} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
                     <CartesianGrid strokeDasharray="3 3" opacity={0.15} />
@@ -488,28 +528,38 @@ export function PowerBiZipVisualizer({ reportData }: { reportData?: ZipReportDat
                 </ResponsiveContainer>
               </div>
 
-              {/* Dedicated Insight Card 04 */}
-              <div className="lg:col-span-4 p-4 rounded-xl bg-[#07111F] border border-rose-500/30 space-y-2">
+              {/* 4-Question Storytelling Panel 04 */}
+              <div className="lg:col-span-5 p-4.5 rounded-2xl bg-[#07111F] border border-rose-500/30 space-y-2">
                 <div className="flex items-center gap-2 text-xs font-mono font-bold text-rose-400">
                   <Icons.brain className="h-4 w-4" />
-                  <span>INSIGHT 04: DELAY DIAGNOSIS</span>
+                  <span>4-QUESTION INSIGHT PANEL 04</span>
                 </div>
-                <h4 className="text-xs font-bold text-white">Dispatch vs Congestion Delays</h4>
-                <p className="text-xs text-gray-300 leading-relaxed font-sans">
-                  <strong className="text-white">Epe-Berger</strong> suffers worst dispatch delay (<strong className="text-rose-400">19 mins late leaving depot</strong> — fixable this week). <strong className="text-white">Ikorodu-Berger</strong> loses 15+ mins to traffic in transit (needs timetable rebuild). <strong className="text-white">Surulere-Festac</strong> suffers both.
-                </p>
+                <div className="space-y-1.5 text-xs">
+                  <p className="text-gray-300 leading-tight">
+                    <strong className="text-white">What is happening?</strong> Epe-Berger has worst dispatch delay (19m late); Ikorodu-Berger loses 15m to traffic.
+                  </p>
+                  <p className="text-gray-300 leading-tight">
+                    <strong className="text-white">Why is it happening?</strong> Epe-Berger is a dispatch process failure; Ikorodu-Berger is in-transit traffic congestion.
+                  </p>
+                  <p className="text-gray-300 leading-tight">
+                    <strong className="text-white">Why does it matter?</strong> Surulere-Festac suffers both failures simultaneously, severely degrading commuter trust.
+                  </p>
+                  <p className="text-gray-300 leading-tight">
+                    <strong className="text-rose-400">What to do next?</strong> Fix Epe-Berger depot dispatch this week and rebuild Ikorodu-Berger timetables.
+                  </p>
+                </div>
               </div>
             </div>
           </div>
 
-          {/* VISUAL 05: Revenue & Profit Leak across Top Busiest Routes */}
-          <div className="p-5 rounded-2xl bg-[#162133] border border-white/10 space-y-4">
+          {/* VISUAL 05: Revenue & Profit Deficit */}
+          <div className="p-5 sm:p-6 rounded-2xl bg-[#162133] border border-white/10 space-y-4 shadow-xl">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 border-b border-white/10 pb-3">
               <div>
                 <div className="flex items-center gap-2">
                   <span className="h-2.5 w-2.5 rounded-full bg-purple-400" />
                   <h3 className="text-sm sm:text-base font-bold font-display text-white">
-                    05. Revenue & Net Profit Deficit across Top 5 Busiest Routes (₦ Millions)
+                    05. Operating Loss across Top 5 Busiest Routes (₦ Millions)
                   </h3>
                 </div>
                 <p className="text-xs text-foreground-secondary pt-0.5 font-mono">Popularity does not guarantee profitability — Surulere-Oshodi loses most revenue</p>
@@ -520,7 +570,7 @@ export function PowerBiZipVisualizer({ reportData }: { reportData?: ZipReportDat
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
-              <div className="lg:col-span-8 h-64 w-full">
+              <div className="lg:col-span-7 h-64 w-full">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart layout="vertical" data={financialLeakageData} margin={{ top: 10, right: 20, left: 40, bottom: 0 }}>
                     <CartesianGrid strokeDasharray="3 3" opacity={0.15} />
@@ -532,16 +582,26 @@ export function PowerBiZipVisualizer({ reportData }: { reportData?: ZipReportDat
                 </ResponsiveContainer>
               </div>
 
-              {/* Dedicated Insight Card 05 */}
-              <div className="lg:col-span-4 p-4 rounded-xl bg-[#07111F] border border-purple-500/30 space-y-2">
+              {/* 4-Question Storytelling Panel 05 */}
+              <div className="lg:col-span-5 p-4.5 rounded-2xl bg-[#07111F] border border-purple-500/30 space-y-2">
                 <div className="flex items-center gap-2 text-xs font-mono font-bold text-purple-400">
                   <Icons.brain className="h-4 w-4" />
-                  <span>INSIGHT 05: PROFIT LEAK</span>
+                  <span>4-QUESTION INSIGHT PANEL 05</span>
                 </div>
-                <h4 className="text-xs font-bold text-white">Popularity ≠ Profitability</h4>
-                <p className="text-xs text-gray-300 leading-relaxed font-sans">
-                  Every single one of our top 5 busiest routes runs a <strong className="text-rose-400">negative operating loss</strong> once maintenance is factored in. <strong className="text-white">Surulere-Oshodi</strong>, our busiest route by volume, loses the most revenue.
-                </p>
+                <div className="space-y-1.5 text-xs">
+                  <p className="text-gray-300 leading-tight">
+                    <strong className="text-white">What is happening?</strong> Every single one of our top 5 busiest routes operates at an unmitigated loss.
+                  </p>
+                  <p className="text-gray-300 leading-tight">
+                    <strong className="text-white">Why is it happening?</strong> Surulere-Oshodi carries highest volume but incurs highest maintenance wear.
+                  </p>
+                  <p className="text-gray-300 leading-tight">
+                    <strong className="text-white">Why does it matter?</strong> High commuter volume hides deep structural farebox under-pricing and maintenance drain.
+                  </p>
+                  <p className="text-gray-300 leading-tight">
+                    <strong className="text-purple-400">What to do next?</strong> Restructure fare tariffs on high-wear lines and mandate digital Cowry cards.
+                  </p>
+                </div>
               </div>
             </div>
           </div>
@@ -549,9 +609,9 @@ export function PowerBiZipVisualizer({ reportData }: { reportData?: ZipReportDat
         </div>
       )}
 
-      {/* TAB CONTENT: EXECUTIVE INTERPRETATION */}
+      {/* TAB CONTENT: 4-QUESTION EXECUTIVE STORY */}
       {activeTab === "interpretation" && (
-        <div className="p-6 rounded-2xl bg-[#162133] border border-white/10 space-y-6">
+        <div className="p-6 rounded-2xl bg-[#162133] border border-white/10 space-y-6 shadow-2xl">
           <div className="flex items-center gap-3 border-b border-white/10 pb-4">
             <div className="p-2.5 rounded-xl bg-[#FFFF00] text-[#07111F] font-black">
               <Icons.brain className="h-5 w-5" />
@@ -565,7 +625,7 @@ export function PowerBiZipVisualizer({ reportData }: { reportData?: ZipReportDat
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="p-5 rounded-xl bg-[#07111F] border border-rose-500/30 space-y-2">
+            <div className="p-5 rounded-2xl bg-[#07111F] border border-rose-500/30 space-y-2">
               <h4 className="text-xs font-bold font-mono text-rose-400 flex items-center gap-2">
                 <span>1. EXECUTIVE SUMMARY & REVENUE LOSS</span>
               </h4>
@@ -574,7 +634,7 @@ export function PowerBiZipVisualizer({ reportData }: { reportData?: ZipReportDat
               </p>
             </div>
 
-            <div className="p-5 rounded-xl bg-[#07111F] border border-emerald-500/30 space-y-2">
+            <div className="p-5 rounded-2xl bg-[#07111F] border border-emerald-500/30 space-y-2">
               <h4 className="text-xs font-bold font-mono text-emerald-400 flex items-center gap-2">
                 <span>2. DEMAND & FLEET REALLOCATION</span>
               </h4>
@@ -583,7 +643,7 @@ export function PowerBiZipVisualizer({ reportData }: { reportData?: ZipReportDat
               </p>
             </div>
 
-            <div className="p-5 rounded-xl bg-[#07111F] border border-amber-500/30 space-y-2">
+            <div className="p-5 rounded-2xl bg-[#07111F] border border-amber-500/30 space-y-2">
               <h4 className="text-xs font-bold font-mono text-amber-400 flex items-center gap-2">
                 <span>3. SCHEDULE & DELAY PERFORMANCE</span>
               </h4>
@@ -592,7 +652,7 @@ export function PowerBiZipVisualizer({ reportData }: { reportData?: ZipReportDat
               </p>
             </div>
 
-            <div className="p-5 rounded-xl bg-[#07111F] border border-purple-500/30 space-y-2">
+            <div className="p-5 rounded-2xl bg-[#07111F] border border-purple-500/30 space-y-2">
               <h4 className="text-xs font-bold font-mono text-purple-400 flex items-center gap-2">
                 <span>4. REVENUE & PROFIT LEAK</span>
               </h4>
@@ -604,9 +664,9 @@ export function PowerBiZipVisualizer({ reportData }: { reportData?: ZipReportDat
         </div>
       )}
 
-      {/* TAB CONTENT: ACTIONABLE RECOMMENDATIONS */}
+      {/* TAB CONTENT: ACTIONABLE PROPOSALS */}
       {activeTab === "recommendations" && (
-        <div className="p-6 rounded-2xl bg-[#162133] border border-white/10 space-y-6">
+        <div className="p-6 rounded-2xl bg-[#162133] border border-white/10 space-y-6 shadow-2xl">
           <div className="flex items-center gap-3 border-b border-white/10 pb-4">
             <div className="p-2.5 rounded-xl bg-[#FFFF00] text-[#07111F] font-black">
               <Icons.target className="h-5 w-5" />

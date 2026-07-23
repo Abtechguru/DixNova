@@ -58,42 +58,56 @@ export function PresentationPowerBiStage() {
       })
   }, [])
 
-  // Official Lagos Transport Analytics Empty State
-  if (!isLoading && reports.length === 0) {
-    return (
-      <div className="w-full max-w-4xl mx-auto rounded-3xl bg-[#162133]/90 border border-surface p-8 sm:p-12 text-center space-y-6 shadow-2xl relative overflow-hidden">
-        {/* Low-opacity vector transport map backdrop */}
-        <div className="absolute inset-0 bg-[radial-gradient(#FFFF00_1px,transparent_1px)] [background-size:24px_24px] opacity-10 pointer-events-none" />
-
-        {/* Vector Transport Network Illustration */}
-        <div className="relative z-10 space-y-4">
-          <div className="h-20 w-20 rounded-2xl bg-[#FFFF00]/10 border border-[#FFFF00]/30 flex items-center justify-center text-[#FFFF00] mx-auto shadow-[0_0_40px_rgba(255,255,0,0.2)]">
-            <Icons.powerbi className="h-10 w-10 animate-pulse" />
-          </div>
-
-          <div className="space-y-2 max-w-lg mx-auto">
-            <h3 className="text-xl font-display font-extrabold text-white tracking-tight">
-              Lagos Transportation Analytics Briefing
-            </h3>
-            <p className="text-xs text-foreground-secondary leading-relaxed">
-              No analytics have been published yet. Upload a validated Power BI report package from the Admin Portal to begin presenting transportation insights.
-            </p>
-          </div>
-
-          <div className="pt-2 flex items-center justify-center gap-3">
-            <Button size="sm" asChild className="bg-[#FFFF00] text-[#07111F] hover:bg-[#FFFF00]/90 font-bold text-xs">
-              <Link href="/admin">Launch Admin CMS Portal ↗</Link>
-            </Button>
-          </div>
-        </div>
-      </div>
-    )
-  }
-
-  const currentReport = reports[activeIdx] || reports[0]
+  const currentReport = reports[activeIdx] || reports[0] || defaultFallback
 
   return (
     <div className="w-full max-w-6xl mx-auto space-y-4 my-2">
+      
+      {/* EXECUTIVE KEYNOTE DASHBOARD FRAME */}
+      <div className="p-5 sm:p-6 rounded-3xl bg-[#162133]/90 border border-white/10 space-y-4 shadow-2xl backdrop-blur-xl">
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-3 border-b border-white/10 pb-4">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2">
+              <Badge variant="default" className="bg-[#FFFF00] text-[#07111F] font-mono text-[9px] font-black">
+                AUTHORITATIVE POWER BI SUBMISSION
+              </Badge>
+              <span className="text-xs font-mono text-cyan-300">Team DixNova • Group 10</span>
+            </div>
+            <h2 className="text-xl sm:text-2xl font-display font-extrabold text-white tracking-tight">
+              SmartMove Nigeria Transportation Intelligence Control Room
+            </h2>
+          </div>
+
+          <Badge variant="outline" className="text-xs font-mono text-[#FFFF00] border-[#FFFF00]/40">
+            2022–2024 VERIFIED ANALYTICS AUDIT
+          </Badge>
+        </div>
+
+        {/* 3-QUESTION EXECUTIVE STORYTELLING FRAME */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+          <div className="p-3.5 rounded-2xl bg-[#07111F] border border-sky-500/30 space-y-1">
+            <div className="text-[10px] font-mono font-bold text-sky-400 uppercase">1. WHAT HAPPENED? (DESCRIPTIVE)</div>
+            <p className="text-xs text-gray-300 leading-snug">
+              400 buses carried 131,000+ passengers generating <strong className="text-emerald-400">₦70.6M revenue</strong> against <strong className="text-rose-400">₦159.8M maintenance cost</strong> (₦89.2M deficit).
+            </p>
+          </div>
+
+          <div className="p-3.5 rounded-2xl bg-[#07111F] border border-amber-500/30 space-y-1">
+            <div className="text-[10px] font-mono font-bold text-amber-400 uppercase">2. WHY DID IT HAPPEN? (DIAGNOSTIC)</div>
+            <p className="text-xs text-gray-300 leading-snug">
+              Top 5 busiest routes run negative operating margin due to un-staggered peak schedules (Surulere 7am vs Yaba-Epe 9pm) and Epe-Berger 19m depot delays.
+            </p>
+          </div>
+
+          <div className="p-3.5 rounded-2xl bg-[#07111F] border border-emerald-500/30 space-y-1">
+            <div className="text-[10px] font-mono font-bold text-emerald-400 uppercase">3. WHAT SHOULD MANAGEMENT DO? (PRESCRIPTIVE)</div>
+            <p className="text-xs text-gray-300 leading-snug">
+              Implement staggered fleet scheduling, enforce 5,000 km preventive maintenance, replace persistent breakdown buses, and track cost by depot.
+            </p>
+          </div>
+        </div>
+      </div>
+
       {/* Multiple Reports Selector Tabs if > 1 report */}
       {reports.length > 1 && (
         <div className="flex items-center gap-2 overflow-x-auto scrollbar-none pb-1">
@@ -104,7 +118,7 @@ export function PresentationPowerBiStage() {
               className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all whitespace-nowrap ${
                 idx === activeIdx
                   ? "bg-[#FFFF00] text-[#07111F] font-bold shadow-soft"
-                  : "bg-card border border-surface text-foreground-secondary hover:text-white"
+                  : "bg-[#162133] border border-white/10 text-gray-300 hover:text-white"
               }`}
             >
               📊 {rpt.name}
@@ -113,7 +127,7 @@ export function PresentationPowerBiStage() {
         </div>
       )}
 
-      {/* Embedded Workspace or ZIP Package Visualizer */}
+      {/* Primary Power BI Report Component */}
       {currentReport && (
         <PowerBiZipVisualizer
           reportData={{
