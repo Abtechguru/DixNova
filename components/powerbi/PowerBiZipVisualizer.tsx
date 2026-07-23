@@ -179,16 +179,16 @@ export function PowerBiZipVisualizer({ reportData }: { reportData?: ZipReportDat
           <div className="flex items-center rounded-xl bg-[#07111F] p-1 border border-white/10">
             <button
               onClick={() => setActiveTab("visuals")}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-                activeTab === "visuals" ? "bg-primary text-primary-foreground shadow-sm" : "text-foreground-secondary hover:text-foreground"
+              className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                activeTab === "visuals" ? "bg-[#FFFF00] text-[#07111F] shadow-sm" : "bg-[#162133] text-gray-300 hover:text-white"
               }`}
             >
               📊 Interactive Charts
             </button>
             <button
               onClick={() => setActiveTab("interpretation")}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-                activeTab === "interpretation" ? "bg-primary text-primary-foreground shadow-sm" : "text-foreground-secondary hover:text-foreground"
+              className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                activeTab === "interpretation" ? "bg-[#FFFF00] text-[#07111F] shadow-sm" : "bg-[#162133] text-gray-300 hover:text-white"
               }`}
             >
               🧠 AI Insights
@@ -196,8 +196,8 @@ export function PowerBiZipVisualizer({ reportData }: { reportData?: ZipReportDat
             {reportData?.files && reportData.files.length > 0 && (
               <button
                 onClick={() => setActiveTab("files")}
-                className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-                  activeTab === "files" ? "bg-primary text-primary-foreground shadow-sm" : "text-foreground-secondary hover:text-foreground"
+                className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                  activeTab === "files" ? "bg-[#FFFF00] text-[#07111F] shadow-sm" : "bg-[#162133] text-gray-300 hover:text-white"
                 }`}
               >
                 📁 Package Files ({reportData.files.length})
@@ -206,11 +206,11 @@ export function PowerBiZipVisualizer({ reportData }: { reportData?: ZipReportDat
             {reportData?.embedUrl && (
               <button
                 onClick={() => setActiveTab("iframe")}
-                className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-                  activeTab === "iframe" ? "bg-primary text-primary-foreground shadow-sm" : "text-foreground-secondary hover:text-foreground"
+                className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                  activeTab === "iframe" ? "bg-[#FFFF00] text-[#07111F] shadow-sm" : "bg-[#162133] text-gray-300 hover:text-white"
                 }`}
               >
-                🌐 Extracted HTML View
+                🌐 Power BI Embed View
               </button>
             )}
           </div>
@@ -233,44 +233,44 @@ export function PowerBiZipVisualizer({ reportData }: { reportData?: ZipReportDat
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             {/* Corridor Slicer */}
             <div className="space-y-1">
-              <label className="text-[11px] font-mono text-foreground-secondary">Slicer: Corridor / Route</label>
+              <label className="text-[11px] font-mono font-bold text-amber-300">Slicer: Corridor / Route</label>
               <select
                 value={selectedCorridor}
                 onChange={(e) => setSelectedCorridor(e.target.value)}
-                className="w-full px-3 py-2 rounded-xl bg-card border border-surface text-xs font-semibold text-foreground focus:outline-none focus:border-primary"
+                className="w-full px-3 py-2.5 rounded-xl bg-[#162133] border border-white/20 text-xs font-semibold text-white focus:outline-none focus:border-[#FFFF00]"
               >
-                <option value="ALL">All BRT Corridors (Unified)</option>
-                <option value="Ikeja Express">Ikeja Express Arterial</option>
-                <option value="Ikorodu BRT">Ikorodu Dedicated BRT Lane</option>
-                <option value="Lekki-Epe">Lekki-Epe Expressway</option>
-                <option value="Oshodi Hub">Oshodi Central Terminal</option>
+                <option value="ALL" className="bg-[#162133] text-white">All BRT Corridors (Unified)</option>
+                <option value="Ikeja Express" className="bg-[#162133] text-white">Ikeja Express Arterial</option>
+                <option value="Ikorodu BRT" className="bg-[#162133] text-white">Ikorodu Dedicated BRT Lane</option>
+                <option value="Lekki-Epe" className="bg-[#162133] text-white">Lekki-Epe Expressway</option>
+                <option value="Oshodi Hub" className="bg-[#162133] text-white">Oshodi Central Terminal</option>
               </select>
             </div>
 
             {/* Fare Type Slicer */}
             <div className="space-y-1">
-              <label className="text-[11px] font-mono text-foreground-secondary">Slicer: Fare Payment Type</label>
+              <label className="text-[11px] font-mono font-bold text-amber-300">Slicer: Fare Payment Type</label>
               <select
                 value={selectedFareType}
                 onChange={(e) => setSelectedFareType(e.target.value)}
-                className="w-full px-3 py-2 rounded-xl bg-card border border-surface text-xs font-semibold text-foreground focus:outline-none focus:border-primary"
+                className="w-full px-3 py-2.5 rounded-xl bg-[#162133] border border-white/20 text-xs font-semibold text-white focus:outline-none focus:border-[#FFFF00]"
               >
-                <option value="ALL">All Payment Types</option>
-                <option value="Cowry Card">Digital Cowry Smartcard</option>
-                <option value="Single Trip">Single-Trip Paper Ticket</option>
-                <option value="Concession">Student/Senior Concession</option>
+                <option value="ALL" className="bg-[#162133] text-white">All Payment Types</option>
+                <option value="Cowry Card" className="bg-[#162133] text-white">Digital Cowry Smartcard</option>
+                <option value="Single Trip" className="bg-[#162133] text-white">Single-Trip Paper Ticket</option>
+                <option value="Concession" className="bg-[#162133] text-white">Student/Senior Concession</option>
               </select>
             </div>
 
             {/* Quick Search */}
             <div className="space-y-1">
-              <label className="text-[11px] font-mono text-foreground-secondary">Search Record Query</label>
+              <label className="text-[11px] font-mono font-bold text-amber-300">Search Record Query</label>
               <input
                 type="text"
                 placeholder="Search corridor or fare..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full px-3 py-2 rounded-xl bg-card border border-surface text-xs text-foreground focus:outline-none focus:border-primary"
+                className="w-full px-3 py-2.5 rounded-xl bg-[#162133] border border-white/20 text-xs font-semibold text-white placeholder-gray-400 focus:outline-none focus:border-[#FFFF00]"
               />
             </div>
           </div>

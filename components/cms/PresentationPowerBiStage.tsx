@@ -28,17 +28,30 @@ export function PresentationPowerBiStage() {
   const [activeIdx, setActiveIdx] = React.useState<number>(0)
   const [isLoading, setIsLoading] = React.useState<boolean>(true)
 
+  const defaultFallback: PowerBiReport = {
+    id: "default-pbi-group10",
+    name: "HACKATHON GROUP 10 PROJECT.pbix",
+    category: "Dashboard Package",
+    description: "Uploaded Power BI Zip package (9 extracted files)",
+    zipUrl: "/uploads/powerbi/zips/HACKATHON-GROUP-10-PROJECT.pbix--1-.zip",
+    fileType: "ZIP_PACKAGE",
+    fileSizeBytes: 608334,
+    isPublished: true
+  }
+
   React.useEffect(() => {
     fetch("/api/cms/powerbi")
       .then(res => res.json())
       .then(res => {
-        if (res.success && Array.isArray(res.reports)) {
+        if (res.success && Array.isArray(res.reports) && res.reports.length > 0) {
           const published = res.reports.filter((r: PowerBiReport) => r.isPublished !== false)
-          setReports(published)
+          setReports(published.length > 0 ? published : [defaultFallback])
+        } else {
+          setReports([defaultFallback])
         }
       })
       .catch(() => {
-        setReports([])
+        setReports([defaultFallback])
       })
       .finally(() => {
         setIsLoading(false)
