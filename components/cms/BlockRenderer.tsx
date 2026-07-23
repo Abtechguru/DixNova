@@ -36,7 +36,16 @@ const PowerBiBlock = ({ data }: { data: any }) => (
   <section className="py-12 px-6 lg:px-12 max-w-7xl mx-auto space-y-4">
     <h2 className="text-3xl font-display font-bold">{data.title}</h2>
     <div className="w-full aspect-[16/9] bg-surface rounded-xl border border-surface/50 overflow-hidden flex items-center justify-center text-foreground-secondary shadow-lg">
-      <p>Embedded Power BI Report: {data.reportId}</p>
+      {data.embedUrl ? (
+        <iframe
+          src={data.embedUrl}
+          title={data.title || "Power BI Report"}
+          className="w-full h-full border-0"
+          allowFullScreen
+        />
+      ) : (
+        <p>Embedded Power BI Report: {data.reportId || "No ID"}</p>
+      )}
     </div>
   </section>
 )

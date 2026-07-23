@@ -57,4 +57,7 @@ export const Icons = {
   revenue: Target,
   kpi: Target,
   brain: Sparkles,
+  analytics: BarChart4,
+  fleet: Database,
+  corridors: BarChart4,
 };

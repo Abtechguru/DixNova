@@ -49,7 +49,7 @@ export async function POST(req: Request) {
         whereDetails: whereDetails || [],
         whyDetails: whyDetails || [],
         fiveWsJson: { summary, whoDetails, whatDetails, whenDetails, whereDetails, whyDetails }
-      },
+      } as any,
       update: {
         businessChallenge: summary,
         whoDetails: whoDetails || [],
@@ -58,7 +58,7 @@ export async function POST(req: Request) {
         whereDetails: whereDetails || [],
         whyDetails: whyDetails || [],
         fiveWsJson: { summary, whoDetails, whatDetails, whenDetails, whereDetails, whyDetails }
-      }
+      } as any
     })
 
     return NextResponse.json({ success: true, data: updated })
