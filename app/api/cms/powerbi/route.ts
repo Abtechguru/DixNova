@@ -1,5 +1,8 @@
 import { NextResponse } from "next/server"
+import * as path from "path"
+import * as fs from "fs"
 import { prisma } from "@/lib/db/prisma"
+import { parsePbiLayoutFile } from "@/lib/utils/pbi-parser"
 
 // Helper to ensure a default Project exists in DB
 async function getOrCreateDefaultProject() {
@@ -53,7 +56,7 @@ export async function GET() {
             category: "Dashboard Package",
             description: "Uploaded Power BI Zip package (9 extracted files)",
             workspaceId: "zip-package-workspace",
-            reportId: "pbi-default-group10",
+            reportId: "pbi-1784809751168",
             embedUrl: "/uploads/powerbi/zips/HACKATHON-GROUP-10-PROJECT.pbix--1-.zip",
             zipUrl: "/uploads/powerbi/zips/HACKATHON-GROUP-10-PROJECT.pbix--1-.zip",
             entryPath: "",
@@ -74,7 +77,7 @@ export async function GET() {
             category: "Dashboard Package",
             description: "Uploaded Power BI Zip package (9 extracted files)",
             workspaceId: "zip-package-workspace",
-            reportId: "pbi-default-group10",
+            reportId: "pbi-1784809751168",
             embedUrl: "/uploads/powerbi/zips/HACKATHON-GROUP-10-PROJECT.pbix--1-.zip",
             zipUrl: "/uploads/powerbi/zips/HACKATHON-GROUP-10-PROJECT.pbix--1-.zip",
             entryPath: "",
@@ -92,7 +95,21 @@ export async function GET() {
       }
     }
 
-    return NextResponse.json({ success: true, reports })
+    // Attach parsed layout data for each report if extracted Report/Layout exists
+    const enrichedReports = reports.map(r => {
+      const reportObj = typeof (r as any).toJSON === "function" ? (r as any).toJSON() : { ...r }
+      const layoutPath = path.join(process.cwd(), "public", "uploads", "powerbi", "extracted", r.reportId || "", "Report", "Layout")
+      
+      if (fs.existsSync(layoutPath)) {
+        const parsedLayout = parsePbiLayoutFile(layoutPath)
+        if (parsedLayout) {
+          reportObj.parsedLayout = parsedLayout
+        }
+      }
+      return reportObj
+    })
+
+    return NextResponse.json({ success: true, reports: enrichedReports })
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error.message || "Failed to fetch Power BI reports" }, { status: 500 })
   }
