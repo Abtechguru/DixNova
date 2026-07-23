@@ -1,22 +1,19 @@
 "use client"
 
 import * as React from "react"
-import Link from "next/link"
 import { Badge } from "@/components/ui/Badge"
-import { Button } from "@/components/ui/Button"
-import { Icons } from "@/lib/utils/icons"
 
 export function ExecutiveSummaryStage() {
   const [activeCard, setActiveCard] = React.useState<number>(0)
   const [isAutoPlaying, setIsAutoPlaying] = React.useState<boolean>(true)
   const [hoveredCard, setHoveredCard] = React.useState<number | null>(null)
 
-  // Auto-cycle through cards
+  // Auto-cycle through 4 cards
   React.useEffect(() => {
     if (!isAutoPlaying || hoveredCard !== null) return
 
     const interval = setInterval(() => {
-      setActiveCard((prev) => (prev + 1) % 5)
+      setActiveCard((prev) => (prev + 1) % 4)
     }, 3800)
 
     return () => clearTimeout(interval)
@@ -57,12 +54,12 @@ export function ExecutiveSummaryStage() {
         {/* Counter Badge */}
         <div className="flex items-center gap-2 bg-[#162133] px-3.5 py-1.5 rounded-full border border-white/15 text-xs font-mono text-foreground-secondary self-end sm:self-auto">
           <span className="h-2 w-2 rounded-full bg-[#FFFF00]" />
-          <span>KEYNOTE CARD {currentHighlight + 1} / 5</span>
+          <span>KEYNOTE CARD {currentHighlight + 1} / 4</span>
         </div>
       </div>
 
-      {/* 5 FLOATING KEYNOTE CARDS GRID */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 items-stretch">
+      {/* 4 FLOATING KEYNOTE CARDS GRID */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 items-stretch">
         
         {/* CARD 1: PROJECT OVERVIEW */}
         <div
@@ -188,41 +185,6 @@ export function ExecutiveSummaryStage() {
 
           <div className="pt-2 border-t border-white/10 text-[10px] font-mono text-cyan-400 font-bold">
             Governed 4-Stage Pipeline
-          </div>
-        </div>
-
-        {/* CARD 5: CALL TO ACTION */}
-        <div
-          onMouseEnter={() => setHoveredCard(4)}
-          onMouseLeave={() => setHoveredCard(null)}
-          className={`p-5 rounded-3xl border transition-all duration-500 cursor-pointer flex flex-col justify-between ${
-            currentHighlight === 4
-              ? "bg-[#162133] border-[#FFFF00] shadow-[0_0_30px_rgba(255,255,0,0.25)] scale-[1.02]"
-              : "bg-[#162133]/70 border-white/10 hover:border-white/30"
-          }`}
-        >
-          <div className="space-y-3">
-            <div className="flex items-center justify-between border-b border-white/10 pb-2">
-              <span className="text-[11px] font-mono font-black text-[#FFFF00] uppercase tracking-widest flex items-center gap-1.5">
-                <span className="h-2 w-2 rounded-full bg-[#FFFF00]" />
-                DECISION ACTION
-              </span>
-              <span className="text-[10px] font-mono text-foreground-secondary">05</span>
-            </div>
-
-            <h3 className="text-base font-display font-bold text-white">Pilot Rollout Proposal</h3>
-
-            <p className="text-xs text-foreground-secondary leading-relaxed font-sans font-normal">
-              We invite transport authorities to evaluate the live Power BI workspace and support a pilot rollout across high-density Express corridors and Lagos Mainland hubs.
-            </p>
-          </div>
-
-          <div className="pt-3 border-t border-white/10 space-y-2">
-            <Button size="sm" asChild className="w-full text-xs font-bold bg-[#FFFF00] text-[#07111F] hover:bg-[#FFFF00]/90 shadow-soft">
-              <Link href="/p/powerbi-dashboards">
-                <Icons.powerbi className="mr-1 h-3.5 w-3.5" /> Power BI Portal ↗
-              </Link>
-            </Button>
           </div>
         </div>
 

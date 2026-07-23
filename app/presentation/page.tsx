@@ -348,7 +348,7 @@ export default function PresentationPage() {
       <LagosTransitBackdrop />
 
       {/* Main Slide Content Card */}
-      <div className="flex-1 flex flex-col justify-center items-center overflow-y-auto py-1 pb-16 w-full max-w-7xl mx-auto scrollbar-none relative z-10">
+      <div className="flex-1 flex flex-col justify-center items-center overflow-y-auto py-1 pb-20 sm:pb-24 w-full max-w-7xl mx-auto scrollbar-none relative z-10">
         {currentSlide !== 0 && (
           <div className="text-center py-2.5 px-6 bg-[#162133]/90 backdrop-blur-xl border border-white/10 rounded-3xl flex-none mb-3 w-full max-w-4xl space-y-0.5 shadow-2xl">
             <h1 className="text-base sm:text-xl md:text-2xl font-display font-extrabold text-white tracking-tight">

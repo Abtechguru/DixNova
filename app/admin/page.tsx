@@ -997,53 +997,53 @@ export default function AdminPage() {
 
               {/* Editing Form */}
               {editingMember && (
-                <form onSubmit={handleSaveMember} className="p-5 border border-primary/40 rounded-2xl bg-surface/20 space-y-4">
-                  <div className="flex items-center justify-between border-b border-surface/50 pb-2">
-                    <h3 className="text-sm font-bold text-primary">
-                      {editingMember.id ? "Edit Team Member" : "Add New Team Member"}
+                <form onSubmit={handleSaveMember} className="p-6 border-2 border-[#FFFF00]/60 rounded-3xl bg-[#07111F] space-y-5 shadow-2xl">
+                  <div className="flex items-center justify-between border-b border-white/10 pb-3">
+                    <h3 className="text-base font-bold font-display text-[#FFFF00] flex items-center gap-2">
+                      <span>{editingMember.id ? "✏️ Edit Team Member Details" : "➕ Add New Team Member"}</span>
                     </h3>
                     <button
                       type="button"
                       onClick={() => setEditingMember(null)}
-                      className="text-xs text-foreground-secondary hover:text-foreground"
+                      className="text-xs font-mono text-gray-400 hover:text-white px-2 py-1 rounded-lg bg-white/5 hover:bg-white/10"
                     >
                       ✕ Close
                     </button>
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-1">
-                      <label className="text-[11px] font-mono text-foreground-secondary">Full Name *</label>
+                    <div className="space-y-1.5">
+                      <label className="text-xs font-mono font-bold text-amber-300">Full Name *</label>
                       <input
                         type="text"
                         required
                         value={editingMember.name || ""}
                         onChange={(e) => setEditingMember({ ...editingMember, name: e.target.value })}
-                        placeholder="e.g. Teddy Yu"
-                        className="w-full px-3 py-2 rounded-xl border border-surface bg-card text-xs text-foreground focus:outline-none focus:border-primary"
+                        placeholder="e.g. Olasupo Akintunde Olusola"
+                        className="w-full px-4 py-3 rounded-xl border border-white/30 bg-[#162133] text-sm font-bold text-white placeholder-gray-400 focus:outline-none focus:border-[#FFFF00] focus:ring-2 focus:ring-[#FFFF00]/50 shadow-inner"
                       />
                     </div>
 
-                    <div className="space-y-1">
-                      <label className="text-[11px] font-mono text-foreground-secondary">Role / Title *</label>
+                    <div className="space-y-1.5">
+                      <label className="text-xs font-mono font-bold text-amber-300">Role / Title *</label>
                       <input
                         type="text"
                         required
                         value={editingMember.role || ""}
                         onChange={(e) => setEditingMember({ ...editingMember, role: e.target.value })}
-                        placeholder="e.g. Lead Data Engineer"
-                        className="w-full px-3 py-2 rounded-xl border border-surface bg-card text-xs text-foreground focus:outline-none focus:border-primary"
+                        placeholder="e.g. Team Lead - Quality Assurance"
+                        className="w-full px-4 py-3 rounded-xl border border-white/30 bg-[#162133] text-sm font-bold text-white placeholder-gray-400 focus:outline-none focus:border-[#FFFF00] focus:ring-2 focus:ring-[#FFFF00]/50 shadow-inner"
                       />
                     </div>
 
-                    <div className="space-y-1 md:col-span-2">
-                      <label className="text-[11px] font-mono text-foreground-secondary">Avatar Photo URL / File Upload</label>
-                      <div className="flex gap-2 items-center">
+                    <div className="space-y-1.5 md:col-span-2">
+                      <label className="text-xs font-mono font-bold text-amber-300">Avatar Photo URL / Direct Upload</label>
+                      <div className="flex gap-3 items-center">
                         {editingMember.avatarUrl && (
                           <img
                             src={editingMember.avatarUrl}
                             alt="Avatar Preview"
-                            className="h-10 w-10 rounded-full object-cover border-2 border-primary/50 shrink-0"
+                            className="h-12 w-12 rounded-full object-cover border-2 border-[#FFFF00] shrink-0 shadow-md"
                           />
                         )}
                         <input
@@ -1051,9 +1051,9 @@ export default function AdminPage() {
                           value={editingMember.avatarUrl || ""}
                           onChange={(e) => setEditingMember({ ...editingMember, avatarUrl: e.target.value })}
                           placeholder="https://... or /uploads/..."
-                          className="flex-1 px-3 py-2 rounded-xl border border-surface bg-card text-xs font-mono text-foreground focus:outline-none focus:border-primary"
+                          className="flex-1 px-4 py-3 rounded-xl border border-white/30 bg-[#162133] text-xs font-mono text-white placeholder-gray-400 focus:outline-none focus:border-[#FFFF00] focus:ring-2 focus:ring-[#FFFF00]/50 shadow-inner"
                         />
-                        <label className="cursor-pointer px-3 py-2 bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl text-xs font-bold border border-primary flex items-center gap-1 shrink-0 shadow-sm">
+                        <label className="cursor-pointer px-4 py-3 bg-[#FFFF00] text-[#07111F] hover:bg-[#FFFF00]/90 rounded-xl text-xs font-black border border-[#FFFF00] flex items-center gap-1.5 shrink-0 shadow-md transition-all hover:scale-105">
                           <span>📷 Upload Photo</span>
                           <input
                             type="file"
@@ -1086,12 +1086,12 @@ export default function AdminPage() {
                     </div>
                   </div>
 
-                  <div className="flex justify-end gap-2 pt-2 border-t border-surface/50">
-                    <Button type="button" variant="ghost" size="sm" onClick={() => setEditingMember(null)}>
+                  <div className="flex justify-end gap-3 pt-3 border-t border-white/10">
+                    <Button type="button" variant="outline" size="sm" onClick={() => setEditingMember(null)} className="text-xs border-white/20 text-white">
                       Cancel
                     </Button>
-                    <Button type="submit" size="sm">
-                      Save Team Member
+                    <Button type="submit" size="sm" className="bg-[#FFFF00] text-[#07111F] hover:bg-[#FFFF00]/90 font-black text-xs px-6 py-2.5 rounded-xl shadow-md">
+                      💾 Save Team Member
                     </Button>
                   </div>
                 </form>

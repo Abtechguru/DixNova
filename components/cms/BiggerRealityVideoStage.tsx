@@ -26,21 +26,6 @@ export function BiggerRealityVideoStage() {
     return () => clearTimeout(timer)
   }, [])
 
-  const saveVideoToDatabase = async (url: string) => {
-    setIsUploading(true)
-    try {
-      await fetch("/api/cms/video", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ videoUrl: url })
-      })
-      setVideoUrl(url)
-    } catch (e) {
-    } finally {
-      setIsUploading(false)
-    }
-  }
-
   const fallbackVideoSrc = "https://assets.mixkit.co/videos/preview/mixkit-traffic-in-a-city-at-night-41550-large.mp4"
 
   return (
@@ -90,41 +75,6 @@ export function BiggerRealityVideoStage() {
 
           {/* Gradient Overlay */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/30 pointer-events-none" />
-
-          {/* Overlay Status Badge */}
-          <div className="absolute top-4 left-4 flex items-center gap-3">
-            <span className="h-3 w-3 rounded-full bg-emerald-500 animate-ping" />
-            <span className="text-xs font-mono font-bold text-white uppercase tracking-widest bg-black/60 backdrop-blur-md px-3 py-1 rounded-full border border-white/20">
-              {isUploading ? "SAVING TO DB..." : "DATABASE PERSISTED MEDIA"}
-            </span>
-          </div>
-
-          {/* Admin Media Selector & Database Sync */}
-          <div className="absolute bottom-4 right-4 z-20 flex gap-2">
-            <label className="cursor-pointer px-3 py-1.5 rounded-xl bg-black/80 backdrop-blur-md text-white text-[11px] font-mono border border-white/20 hover:bg-black transition-all flex items-center gap-2 shadow-lg">
-              <Icons.dashboard className="h-4 w-4 text-primary" />
-              <span>Upload Video / Image</span>
-              <input
-                type="file"
-                accept="video/*,image/*"
-                className="hidden"
-                onChange={(e) => {
-                  const file = e.target.files?.[0]
-                  if (file) {
-                    const reader = new FileReader()
-                    reader.onload = async (event) => {
-                      const dataUrl = event.target?.result as string
-                      if (dataUrl) {
-                        setVideoUrl(dataUrl)
-                        await saveVideoToDatabase(dataUrl)
-                      }
-                    }
-                    reader.readAsDataURL(file)
-                  }
-                }}
-              />
-            </label>
-          </div>
         </div>
       )}
 
