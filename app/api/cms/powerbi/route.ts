@@ -64,7 +64,7 @@ export async function GET() {
             fileSizeBytes: 608334,
             displayOrder: 0,
             isPublished: true
-          }
+          } as any
         })
         reports = [defaultReport]
       } catch (err) {
@@ -142,7 +142,7 @@ export async function POST(req: Request) {
         fileSizeBytes: typeof fileSizeBytes === "number" ? fileSizeBytes : null,
         isPublished: isPublished !== undefined ? Boolean(isPublished) : true,
         displayOrder: typeof displayOrder === "number" ? displayOrder : 0
-      }
+      } as any
     })
 
     return NextResponse.json({ success: true, report })
