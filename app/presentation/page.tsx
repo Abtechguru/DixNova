@@ -1,17 +1,27 @@
 "use client"
 
 import * as React from "react"
+import dynamic from "next/dynamic"
 import Link from "next/link"
 import { Button } from "@/components/ui/Button"
 import { Badge } from "@/components/ui/Badge"
 import { Icons } from "@/lib/utils/icons"
-import { ProblemStatement5Ws } from "@/components/cms/ProblemStatement5Ws"
-import { TeamMembersGrid, TeamMemberItem } from "@/components/cms/TeamMembersGrid"
-import { ProjectObjectivesGrid } from "@/components/cms/ProjectObjectivesGrid"
-import { AnalyticsMaturityJourney } from "@/components/cms/AnalyticsMaturityJourney"
-import { BiggerRealityVideoStage } from "@/components/cms/BiggerRealityVideoStage"
-import { PresentationPowerBiStage } from "@/components/cms/PresentationPowerBiStage"
-import { ExecutiveSummaryStage } from "@/components/cms/ExecutiveSummaryStage"
+
+import type { TeamMemberItem, TeamMembersGridProps } from "@/components/cms/TeamMembersGrid"
+
+// Lazy loaded presentation stage components for code splitting & initial load performance
+const ProblemStatement5Ws = dynamic(() => import("@/components/cms/ProblemStatement5Ws").then(m => m.ProblemStatement5Ws as any))
+const TeamMembersGrid = dynamic<TeamMembersGridProps>(() => import("@/components/cms/TeamMembersGrid").then(m => m.TeamMembersGrid as any))
+const ProjectObjectivesGrid = dynamic(() => import("@/components/cms/ProjectObjectivesGrid").then(m => m.ProjectObjectivesGrid as any))
+const AnalyticsMaturityJourney = dynamic(() => import("@/components/cms/AnalyticsMaturityJourney").then(m => m.AnalyticsMaturityJourney as any))
+const BiggerRealityVideoStage = dynamic(() => import("@/components/cms/BiggerRealityVideoStage").then(m => m.BiggerRealityVideoStage as any))
+const PresentationPowerBiStage = dynamic(() => import("@/components/cms/PresentationPowerBiStage").then(m => m.PresentationPowerBiStage as any))
+const ExecutiveSummaryStage = dynamic(() => import("@/components/cms/ExecutiveSummaryStage").then(m => m.ExecutiveSummaryStage as any))
+const BusinessUnderstandingStage = dynamic(() => import("@/components/cms/BusinessUnderstandingStage").then(m => m.BusinessUnderstandingStage as any))
+const DataUnderstandingStage = dynamic(() => import("@/components/cms/DataUnderstandingStage").then(m => m.DataUnderstandingStage as any))
+const DataCleaningStage = dynamic(() => import("@/components/cms/DataCleaningStage").then(m => m.DataCleaningStage as any))
+const DataPreparationStage = dynamic(() => import("@/components/cms/DataPreparationStage").then(m => m.DataPreparationStage as any))
+const DataModelingStage = dynamic(() => import("@/components/cms/DataModelingStage").then(m => m.DataModelingStage as any))
 
 interface Slide {
   stage: string
@@ -24,7 +34,7 @@ export default function PresentationPage() {
   const [currentSlide, setCurrentSlide] = React.useState(0)
   const [dbMembers, setDbMembers] = React.useState<TeamMemberItem[]>([])
 
-  React.useEffect(() => {
+  const fetchMembers = React.useCallback(() => {
     fetch("/api/cms/team-members")
       .then(res => res.json())
       .then(res => {
@@ -33,6 +43,33 @@ export default function PresentationPage() {
         }
       })
       .catch(() => {})
+  }, [])
+
+  React.useEffect(() => {
+    fetchMembers()
+  }, [fetchMembers])
+
+  React.useEffect(() => {
+    if (currentSlide === 18) { // STAGE 19 (index 18)
+      fetchMembers()
+    }
+  }, [currentSlide, fetchMembers])
+
+  // Keyboard navigation support (Left/Right arrows, PageUp/PageDown, Home/End)
+  React.useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "ArrowRight" || e.key === "PageDown") {
+        setCurrentSlide(prev => Math.min(20 - 1, prev + 1))
+      } else if (e.key === "ArrowLeft" || e.key === "PageUp") {
+        setCurrentSlide(prev => Math.max(0, prev - 1))
+      } else if (e.key === "Home") {
+        setCurrentSlide(0)
+      } else if (e.key === "End") {
+        setCurrentSlide(19)
+      }
+    }
+    window.addEventListener("keydown", handleKeyDown)
+    return () => window.removeEventListener("keydown", handleKeyDown)
   }, [])
 
   const slides: Slide[] = [
@@ -102,11 +139,8 @@ export default function PresentationPage() {
       title: "Business Understanding",
       subtitle: "Domain Research & Stakeholder Mapping",
       content: (
-        <div className="p-6 border border-surface rounded-xl bg-surface/20 space-y-2 max-w-xl mx-auto">
-          <h4 className="font-bold font-display text-sm">Stakeholder Alignment</h4>
-          <p className="text-xs text-foreground-secondary">
-            Team DixNova mapped operational pain points across transit authorities, BRT operators, and commuters prior to data collection.
-          </p>
+        <div className="w-full max-w-5xl mx-auto">
+          <BusinessUnderstandingStage />
         </div>
       )
     },
@@ -117,11 +151,8 @@ export default function PresentationPage() {
       title: "Data Understanding",
       subtitle: "Exploratory Telemetry Data Assessment",
       content: (
-        <div className="p-6 border border-surface rounded-xl bg-card space-y-2 max-w-xl mx-auto">
-          <h4 className="font-bold text-primary font-display text-sm">Multimodal Data Feeds</h4>
-          <p className="text-xs text-foreground-secondary">
-            Assessed dataset structures across GPS vehicle telemetry feeds, Cowry card transaction logs, and arterial road sensor records.
-          </p>
+        <div className="w-full max-w-5xl mx-auto">
+          <DataUnderstandingStage />
         </div>
       )
     },
@@ -132,11 +163,8 @@ export default function PresentationPage() {
       title: "Data Cleaning",
       subtitle: "Data Quality Scorecard Rules & Filtering",
       content: (
-        <div className="p-6 border border-surface rounded-xl bg-surface/30 space-y-2 max-w-xl mx-auto">
-          <h4 className="font-bold font-display text-sm">6-Dimension Quality Pipeline</h4>
-          <p className="text-xs text-foreground-secondary">
-            Filtered null values, duplicate transaction keys, and GPS drift errors to establish a verified Data Quality Scorecard.
-          </p>
+        <div className="w-full max-w-5xl mx-auto">
+          <DataCleaningStage />
         </div>
       )
     },
@@ -147,11 +175,8 @@ export default function PresentationPage() {
       title: "Data Preparation",
       subtitle: "Transformation, Normalization & Feature Engineering",
       content: (
-        <div className="p-6 border border-surface rounded-xl bg-card space-y-2 max-w-xl mx-auto">
-          <h4 className="font-bold text-primary font-display text-sm">Feature Engineering</h4>
-          <p className="text-xs text-foreground-secondary">
-            Engineered trip duration metrics, peak-hour congestion flags, and digital payment ratio variables for downstream modeling.
-          </p>
+        <div className="w-full max-w-5xl mx-auto">
+          <DataPreparationStage />
         </div>
       )
     },
@@ -162,11 +187,8 @@ export default function PresentationPage() {
       title: "Data Modeling",
       subtitle: "Star-Schema Architecture",
       content: (
-        <div className="p-6 border border-surface rounded-xl bg-card space-y-2 max-w-xl mx-auto">
-          <h4 className="font-bold text-primary font-display text-sm">Dimensional Modeling</h4>
-          <p className="text-xs text-foreground-secondary">
-            Structured `Fact_Revenue`, `Fact_Telemetry`, `Dim_Corridor`, and `Dim_Vehicle` tables for optimal Power BI DAX performance.
-          </p>
+        <div className="w-full max-w-5xl mx-auto">
+          <DataModelingStage />
         </div>
       )
     },
@@ -320,9 +342,9 @@ export default function PresentationPage() {
   const slide = slides[currentSlide]
 
   return (
-    <div className="min-h-screen min-h-[100dvh] w-full max-w-full overflow-x-hidden bg-background text-foreground flex flex-col justify-between p-3 sm:p-6 md:p-8 space-y-4">
+    <div className="h-screen max-h-screen w-full max-w-full overflow-hidden bg-background text-foreground flex flex-col justify-between p-2 sm:p-4 space-y-2">
       {/* Top Header Controls */}
-      <div className="flex items-center justify-between border-b border-surface pb-3 flex-none">
+      <div className="flex items-center justify-between border-b border-surface pb-2 flex-none">
         <div className="flex items-center gap-2 sm:gap-3">
           <Badge variant="default" className="text-[10px] sm:text-xs">{slide.stage}</Badge>
           <span className="text-[10px] sm:text-xs font-mono text-foreground-secondary">SLIDE {currentSlide + 1} / {slides.length}</span>
@@ -332,18 +354,9 @@ export default function PresentationPage() {
         </Button>
       </div>
 
-      {/* Main Slide Card (Centered Vertically) */}
-      <div className="flex-1 flex flex-col justify-center items-center my-auto py-2 w-full max-w-7xl mx-auto">
-        {currentSlide !== 0 && (
-          <div className="space-y-1 sm:space-y-2 text-center mb-4 sm:mb-6">
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-display font-extrabold tracking-tight text-foreground">
-              {slide.title}
-            </h1>
-            <p className="text-xs sm:text-sm text-foreground-secondary">{slide.subtitle}</p>
-          </div>
-        )}
-
-        <div className="w-full">
+      {/* Main Slide Card (Full-Height Viewport Container) */}
+      <div className="flex-1 flex flex-col justify-center items-center overflow-y-auto py-1 w-full max-w-7xl mx-auto scrollbar-none">
+        <div className="w-full my-auto">
           {slide.content}
         </div>
       </div>

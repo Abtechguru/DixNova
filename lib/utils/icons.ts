@@ -21,10 +21,11 @@ import {
   ChevronRight,
   MoreVertical,
   LogOut,
-  Loader2
+  Loader2,
+  Presentation
 } from "lucide-react";
 
-export const Icons = {
+const baseIcons: Record<string, any> = {
   // Modules
   dashboard: LayoutDashboard,
   projects: FolderOpen,
@@ -60,4 +61,17 @@ export const Icons = {
   analytics: BarChart4,
   fleet: Database,
   corridors: BarChart4,
+  document: FileText,
+  presentation: Presentation,
 };
+
+export const Icons = new Proxy(baseIcons, {
+  get(target, prop: string) {
+    if (typeof prop === "string" && prop in target) {
+      return target[prop];
+    }
+    // Fallback icon to prevent undefined component errors
+    return Sparkles;
+  }
+});
+

@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server"
 import { prisma } from "@/lib/db/prisma"
-import { getSession } from "@/lib/auth/session"
 
 const SEED_MEMBERS = [
   {
@@ -35,6 +34,7 @@ const SEED_MEMBERS = [
   }
 ]
 
+// GET /api/cms/team-members
 export async function GET() {
   try {
     const db = prisma as any
@@ -63,6 +63,7 @@ export async function GET() {
   }
 }
 
+// POST /api/cms/team-members
 export async function POST(req: Request) {
   try {
     const body = await req.json()
@@ -79,24 +80,29 @@ export async function POST(req: Request) {
 
     const created = await db.teamMember.create({
       data: {
-        name,
-        role,
+        name: name.trim(),
+        role: role.trim(),
         avatarUrl: avatarUrl || null,
         bio: bio || null,
-        order: order || 0
+        order: Number(order) || 0
       }
     })
 
     return NextResponse.json({ success: true, data: created })
   } catch (error: any) {
-    return NextResponse.json({ success: false, error: error.message }, { status: 500 })
+    return NextResponse.json({ success: false, error: error.message || "Failed to create team member" }, { status: 500 })
   }
 }
 
+// PUT /api/cms/team-members
 export async function PUT(req: Request) {
   try {
     const body = await req.json()
     const { id, name, role, avatarUrl, bio, order } = body
+
+    if (!id) {
+      return NextResponse.json({ success: false, error: "Member ID is required" }, { status: 400 })
+    }
 
     if (!name || !role) {
       return NextResponse.json({ success: false, error: "Name and role are required" }, { status: 400 })
@@ -110,20 +116,21 @@ export async function PUT(req: Request) {
     const updated = await db.teamMember.update({
       where: { id },
       data: {
-        name,
-        role,
+        name: name.trim(),
+        role: role.trim(),
         avatarUrl: avatarUrl || null,
         bio: bio || null,
-        order: order || 0
+        order: Number(order) || 0
       }
     })
 
     return NextResponse.json({ success: true, data: updated })
   } catch (error: any) {
-    return NextResponse.json({ success: false, error: error.message }, { status: 500 })
+    return NextResponse.json({ success: false, error: error.message || "Failed to update team member" }, { status: 500 })
   }
 }
 
+// DELETE /api/cms/team-members
 export async function DELETE(req: Request) {
   try {
     const { searchParams } = new URL(req.url)
@@ -139,7 +146,6 @@ export async function DELETE(req: Request) {
     }
     return NextResponse.json({ success: true })
   } catch (error: any) {
-    return NextResponse.json({ success: false, error: error.message }, { status: 500 })
+    return NextResponse.json({ success: false, error: error.message || "Failed to delete team member" }, { status: 500 })
   }
 }
-

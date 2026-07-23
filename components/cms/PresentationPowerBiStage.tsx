@@ -14,28 +14,13 @@ interface PowerBiReport {
   workspaceId?: string
   reportId?: string
   embedUrl?: string
+  zipUrl?: string
+  entryPath?: string
+  fileType?: string
+  fileSizeBytes?: number
   isPublished?: boolean
   displayOrder?: number
 }
-
-const DEFAULT_REPORTS: PowerBiReport[] = [
-  {
-    id: "sample-1",
-    name: "Commuter Farebox Recovery & Revenue Analytics",
-    category: "Financial Intelligence",
-    description: "Real-time Cowry card tap-in transactions, fare recovery percentage across BRT corridors, and digital payment penetration.",
-    embedUrl: "https://app.powerbi.com/view?r=eyJrIjoiOGZmMmRlMzgtN2ZlYS00ZTk0LTg3OWItZGYwN2Q1Y2E4OWUxIiwidCI6IjYxZDExMWJmLWFlNGItNGRjYi1hZDAyLTlhZTc3NDk5Mzk5YSJ9",
-    isPublished: true
-  },
-  {
-    id: "sample-2",
-    name: "Lagos Corridor Traffic & Vehicle Telemetry",
-    category: "Traffic Management",
-    description: "GPS telemetry speed tracking, peak hour bottleneck detection, and arterial corridor congestion index across Ikeja, Lekki, and Ikorodu.",
-    embedUrl: "https://app.powerbi.com/view?r=eyJrIjoiOGZmMmRlMzgtN2ZlYS00ZTk0LTg3OWItZGYwN2Q1Y2E4OWUxIiwidCI6IjYxZDExMWJmLWFlNGItNGRjYi1hZDAyLTlhZTc3NDk5Mzk5YSJ9",
-    isPublished: true
-  }
-]
 
 export function PresentationPowerBiStage() {
   const [reports, setReports] = React.useState<PowerBiReport[]>([])
@@ -49,22 +34,32 @@ export function PresentationPowerBiStage() {
     fetch("/api/cms/powerbi")
       .then(res => res.json())
       .then(res => {
-        if (res.success && Array.isArray(res.reports) && res.reports.length > 0) {
+        if (res.success && Array.isArray(res.reports)) {
           const published = res.reports.filter((r: PowerBiReport) => r.isPublished !== false)
-          setReports(published.length > 0 ? published : DEFAULT_REPORTS)
-        } else {
-          setReports(DEFAULT_REPORTS)
+          setReports(published)
         }
       })
       .catch(() => {
-        setReports(DEFAULT_REPORTS)
+        setReports([])
       })
       .finally(() => {
         setIsLoading(false)
       })
   }, [])
 
-  const currentReport = reports[activeIdx] || DEFAULT_REPORTS[0]
+  if (!isLoading && reports.length === 0) {
+    return (
+      <div className="w-full bg-card border border-surface rounded-2xl p-8 text-center space-y-3 shadow-2xl">
+        <Icons.powerbi className="h-10 w-10 text-primary/70 mx-auto" />
+        <h3 className="text-base font-bold font-display text-foreground">No Published Power BI Control Rooms</h3>
+        <p className="text-xs text-foreground-secondary max-w-md mx-auto">
+          Administrator has not published a Power BI embed report or ZIP package yet. Upload and configure reports in the Admin CMS.
+        </p>
+      </div>
+    )
+  }
+
+  const currentReport = reports[activeIdx] || reports[0]
 
   const toggleFullscreen = () => {
     if (!containerRef.current) return
@@ -93,6 +88,11 @@ export function PresentationPowerBiStage() {
                   {currentReport.category}
                 </Badge>
               )}
+              {currentReport.fileType === "ZIP_PACKAGE" && (
+                <Badge variant="outline" className="text-[10px] bg-emerald-500/10 text-emerald-600 border-emerald-500/30">
+                  📦 ZIP PACKAGE
+                </Badge>
+              )}
             </div>
             <p className="text-xs text-foreground-secondary line-clamp-1">
               {currentReport.description || "Live Power BI Embedded Visualization Control Room"}
@@ -101,6 +101,13 @@ export function PresentationPowerBiStage() {
         </div>
 
         <div className="flex items-center gap-2 self-end md:self-auto">
+          {currentReport.zipUrl && (
+            <Button variant="outline" size="sm" asChild className="text-xs">
+              <a href={currentReport.zipUrl} download>
+                📥 Download ZIP
+              </a>
+            </Button>
+          )}
           <Button variant="outline" size="sm" onClick={toggleFullscreen} className="text-xs">
             {isFullscreen ? "Exit Fullscreen" : "Fullscreen"}
           </Button>

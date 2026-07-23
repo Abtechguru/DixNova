@@ -144,10 +144,14 @@ export default function AdminPage() {
       for (let i = 0; i < files.length; i++) {
         const formData = new FormData()
         formData.append("file", files[i])
-        await fetch("/api/cms/media", {
+        const res = await fetch("/api/cms/media", {
           method: "POST",
           body: formData
         })
+        const data = await res.json()
+        if (!data.success) {
+          showToast(data.error || "File upload failed", "error")
+        }
       }
       showToast(`${files.length} media file(s) uploaded successfully!`)
       fetchMediaAssets()
@@ -155,6 +159,7 @@ export default function AdminPage() {
       showToast("File upload failed", "error")
     } finally {
       setIsMediaUploading(false)
+      e.target.value = ""
     }
   }
 
@@ -188,6 +193,7 @@ export default function AdminPage() {
   // ---------------------------------------------------------------------------
   const [pbiReports, setPbiReports] = React.useState<PowerBiReport[]>([])
   const [isPbiLoading, setIsPbiLoading] = React.useState(false)
+  const [isPbiZipUploading, setIsPbiZipUploading] = React.useState(false)
   const [editingPbi, setEditingPbi] = React.useState<Partial<PowerBiReport> | null>(null)
   const [pbiPreviewUrl, setPbiPreviewUrl] = React.useState<string>("")
 
@@ -207,6 +213,39 @@ export default function AdminPage() {
   React.useEffect(() => {
     fetchPbiReports()
   }, [])
+
+  const handleZipFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    setIsPbiZipUploading(true)
+    const formData = new FormData()
+    formData.append("file", file)
+    if (editingPbi?.name) formData.append("name", editingPbi.name)
+    if (editingPbi?.category) formData.append("category", editingPbi.category)
+    if (editingPbi?.description) formData.append("description", editingPbi.description)
+    if (editingPbi?.id) formData.append("id", editingPbi.id)
+
+    try {
+      const res = await fetch("/api/cms/powerbi/upload-zip", {
+        method: "POST",
+        body: formData
+      })
+      const data = await res.json()
+      if (data.success) {
+        showToast(`Power BI ZIP package uploaded & extracted (${data.extraction?.fileCount || 0} files)!`)
+        setEditingPbi(null)
+        fetchPbiReports()
+      } else {
+        showToast(data.error || "ZIP upload failed", "error")
+      }
+    } catch (err) {
+      showToast("Failed to upload ZIP package", "error")
+    } finally {
+      setIsPbiZipUploading(false)
+      e.target.value = ""
+    }
+  }
 
   const handleSavePbi = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -698,23 +737,37 @@ export default function AdminPage() {
                   </p>
                 </div>
 
-                <Button
-                  onClick={() => {
-                    setEditingPbi({
-                      name: "Commuter Farebox Recovery Dashboard",
-                      category: "Financial Intelligence",
-                      description: "Interactive Cowry card revenue and trip density report.",
-                      embedUrl: "https://app.powerbi.com/view?r=eyJrIjoiOGZmMmRlMzgtN2ZlYS00ZTk0LTg3OWItZGYwN2Q1Y2E4OWUxIiwidCI6IjYxZDExMWJmLWFlNGItNGRjYi1hZDAyLTlhZTc3NDk5Mzk5YSJ9",
-                      workspaceId: "ws-lagos-transit",
-                      reportId: "rpt-farebox-01",
-                      isPublished: true,
-                      displayOrder: pbiReports.length + 1
-                    })
-                  }}
-                  className="text-xs font-bold"
-                >
-                  + Add Power BI Report
-                </Button>
+                <div className="flex items-center gap-2">
+                  <label className="cursor-pointer px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition-all flex items-center gap-2 shadow-lg">
+                    <Icons.projects className="h-4 w-4" />
+                    <span>{isPbiZipUploading ? "Extracting ZIP..." : "📦 Upload & Extract ZIP Package"}</span>
+                    <input
+                      type="file"
+                      accept=".zip,.pbix"
+                      className="hidden"
+                      onChange={handleZipFileUpload}
+                      disabled={isPbiZipUploading}
+                    />
+                  </label>
+
+                  <Button
+                    onClick={() => {
+                      setEditingPbi({
+                        name: "Commuter Farebox Recovery Dashboard",
+                        category: "Financial Intelligence",
+                        description: "Interactive Cowry card revenue and trip density report.",
+                        embedUrl: "https://app.powerbi.com/view?r=eyJrIjoiOGZmMmRlMzgtN2ZlYS00ZTk0LTg3OWItZGYwN2Q1Y2E4OWUxIiwidCI6IjYxZDExMWJmLWFlNGItNGRjYi1hZDAyLTlhZTc3NDk5Mzk5YSJ9",
+                        workspaceId: "ws-lagos-transit",
+                        reportId: "rpt-farebox-01",
+                        isPublished: true,
+                        displayOrder: pbiReports.length + 1
+                      })
+                    }}
+                    className="text-xs font-bold"
+                  >
+                    + Add Power BI Embed URL
+                  </Button>
+                </div>
               </div>
 
               {/* Form Modal / Panel for Creating/Editing */}
@@ -1004,11 +1057,19 @@ export default function AdminPage() {
                               if (file) {
                                 const formData = new FormData()
                                 formData.append("file", file)
-                                const res = await fetch("/api/cms/media", { method: "POST", body: formData })
-                                const data = await res.json()
-                                if (data.success && data.asset?.url) {
-                                  setEditingMember({ ...editingMember, avatarUrl: data.asset.url })
-                                  showToast("Photo uploaded!")
+                                try {
+                                  const res = await fetch("/api/cms/media", { method: "POST", body: formData })
+                                  const data = await res.json()
+                                  if (data.success && data.asset?.url) {
+                                    setEditingMember(prev => prev ? { ...prev, avatarUrl: data.asset.url } : null)
+                                    showToast("Photo uploaded successfully!")
+                                  } else {
+                                    showToast(data.error || "Photo upload failed", "error")
+                                  }
+                                } catch (err) {
+                                  showToast("Photo upload failed", "error")
+                                } finally {
+                                  e.target.value = ""
                                 }
                               }
                             }}

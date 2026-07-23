@@ -52,7 +52,7 @@ export async function GET() {
 export async function POST(req: Request) {
   try {
     const body = await req.json()
-    const { name, category, description, workspaceId, reportId, embedUrl, isPublished, displayOrder } = body
+    const { name, category, description, workspaceId, reportId, embedUrl, zipUrl, entryPath, fileType, fileSizeBytes, isPublished, displayOrder } = body
 
     if (!name) {
       return NextResponse.json({ success: false, error: "Report name is required" }, { status: 400 })
@@ -69,6 +69,10 @@ export async function POST(req: Request) {
         workspaceId: workspaceId || "default-workspace",
         reportId: reportId || `pbi-${Date.now()}`,
         embedUrl: embedUrl || "",
+        zipUrl: zipUrl || null,
+        entryPath: entryPath || null,
+        fileType: fileType || (zipUrl ? "ZIP_PACKAGE" : "EMBED_URL"),
+        fileSizeBytes: typeof fileSizeBytes === "number" ? fileSizeBytes : null,
         isPublished: isPublished !== undefined ? Boolean(isPublished) : true,
         displayOrder: typeof displayOrder === "number" ? displayOrder : 0
       }
@@ -84,7 +88,7 @@ export async function POST(req: Request) {
 export async function PUT(req: Request) {
   try {
     const body = await req.json()
-    const { id, name, category, description, workspaceId, reportId, embedUrl, isPublished, displayOrder } = body
+    const { id, name, category, description, workspaceId, reportId, embedUrl, zipUrl, entryPath, fileType, fileSizeBytes, isPublished, displayOrder } = body
 
     if (!id) {
       return NextResponse.json({ success: false, error: "Report ID is required" }, { status: 400 })
@@ -97,6 +101,10 @@ export async function PUT(req: Request) {
     if (workspaceId !== undefined) dataToUpdate.workspaceId = workspaceId
     if (reportId !== undefined) dataToUpdate.reportId = reportId
     if (embedUrl !== undefined) dataToUpdate.embedUrl = embedUrl
+    if (zipUrl !== undefined) dataToUpdate.zipUrl = zipUrl
+    if (entryPath !== undefined) dataToUpdate.entryPath = entryPath
+    if (fileType !== undefined) dataToUpdate.fileType = fileType
+    if (fileSizeBytes !== undefined) dataToUpdate.fileSizeBytes = fileSizeBytes
     if (isPublished !== undefined) dataToUpdate.isPublished = Boolean(isPublished)
     if (displayOrder !== undefined) dataToUpdate.displayOrder = Number(displayOrder)
 
