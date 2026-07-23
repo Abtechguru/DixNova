@@ -71,13 +71,13 @@ export function PowerBiZipVisualizer({ reportData }: { reportData?: ZipReportDat
 
   // Executive Bookmark Pages
   const reportPages = [
-    { id: "page1", name: "page1", displayName: "🏠 Executive Summary", icon: "home" },
-    { id: "page2", name: "page2", displayName: "👥 Passenger Analytics", icon: "user" },
-    { id: "page3", name: "page3", displayName: "🚌 Fleet Analytics", icon: "bus" },
-    { id: "page4", name: "page4", displayName: "💰 Revenue Analytics", icon: "dollar" },
-    { id: "page5", name: "page5", displayName: "🔧 Maintenance Analytics", icon: "wrench" },
-    { id: "page6", name: "page6", displayName: "📍 Route Performance", icon: "map" },
-    { id: "page7", name: "page7", displayName: "💡 Recommendations", icon: "target" }
+    { id: "page1", name: "page1", displayName: "🏠 Executive Summary" },
+    { id: "page2", name: "page2", displayName: "👥 Passenger Analytics" },
+    { id: "page3", name: "page3", displayName: "🚌 Fleet Analytics" },
+    { id: "page4", name: "page4", displayName: "💰 Revenue Analytics" },
+    { id: "page5", name: "page5", displayName: "🔧 Maintenance Analytics" },
+    { id: "page6", name: "page6", displayName: "📍 Route Performance" },
+    { id: "page7", name: "page7", displayName: "💡 Recommendations" }
   ]
 
   // VERIFIED REAL DATA FROM TEAM DIXNOVA POWER BI REPORT (2022–2024)
@@ -119,6 +119,67 @@ export function PowerBiZipVisualizer({ reportData }: { reportData?: ZipReportDat
     setSearchTerm("")
   }
 
+  // DOWNLOAD HANDLERS FOR PBIX PACKAGE & EXECUTIVE POWER BI THEME JSON
+  const handleDownloadPackage = () => {
+    const downloadUrl = reportData?.zipUrl || "/uploads/powerbi/zips/HACKATHON-GROUP-10-PROJECT.pbix--1-.zip"
+    const link = document.createElement("a")
+    link.href = downloadUrl
+    link.download = reportData?.name || "HACKATHON_GROUP_10_PROJECT.pbix"
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+  }
+
+  const handleDownloadThemeJson = () => {
+    const themeObj = {
+      name: "SmartMove DixNova Executive Transportation Theme",
+      dataColors: ["#FFFF00", "#10B981", "#EF4444", "#0284C7", "#8B5CF6", "#F59E0B", "#EC4899", "#38BDF8"],
+      background: "#07111F",
+      foreground: "#FFFFFF",
+      tableAccent: "#FFFF00",
+      maximum: "#EF4444",
+      minimum: "#10B981",
+      null: "#64748B",
+      visualStyles: {
+        "*": {
+          "*": {
+            "outspacePane": [{ "backgroundColor": { "solid": { "color": "#07111F" } } }],
+            "background": [{ "color": { "solid": { "color": "#162133" } }, "transparency": 0 }],
+            "border": [{ "show": true, "color": { "solid": { "color": "#334155" } }, "radius": 12 }],
+            "title": [{ "show": true, "fontColor": { "solid": { "color": "#FFFFFF" } }, "fontSize": 11, "fontFamily": "Segoe UI", "alignment": "left" }],
+            "dropShadow": [{ "show": true, "color": { "solid": { "color": "#000000" } }, "position": "Outer", "preset": "BottomRight" }]
+          }
+        },
+        "page": {
+          "*": {
+            "background": [{ "color": { "solid": { "color": "#07111F" } }, "transparency": 0 }],
+            "outspacePane": [{ "backgroundColor": { "solid": { "color": "#07111F" } } }]
+          }
+        },
+        "card": {
+          "*": {
+            "labels": [{ "color": { "solid": { "color": "#FFFF00" } }, "fontSize": 20, "fontFamily": "Segoe UI" }],
+            "categoryAxis": [{ "color": { "solid": { "color": "#94A3B8" } }, "fontSize": 10 }]
+          }
+        },
+        "slicer": {
+          "*": {
+            "header": [{ "fontColor": { "solid": { "color": "#F59E0B" } }, "fontSize": 10, "fontFamily": "Segoe UI" }],
+            "items": [{ "fontColor": { "solid": { "color": "#FFFFFF" } }, "background": { "solid": { "color": "#07111F" } } }]
+          }
+        }
+      }
+    }
+
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(themeObj, null, 2))
+    const downloadAnchor = document.createElement("a")
+    downloadAnchor.setAttribute("href", dataStr)
+    downloadAnchor.setAttribute("download", "DixNova_Executive_PowerBI_Theme.json")
+    document.body.appendChild(downloadAnchor)
+    downloadAnchor.click()
+    downloadAnchor.remove()
+  }
+
   // Fleet Status Pie Breakdown
   const fleetBreakdown = [
     { name: "Active Fleet (323 Buses)", value: 323, color: "#10b981" },
@@ -145,7 +206,7 @@ export function PowerBiZipVisualizer({ reportData }: { reportData?: ZipReportDat
     <div className="w-full rounded-3xl bg-[#07111F]/95 border border-white/10 p-4 sm:p-6 space-y-6 shadow-2xl backdrop-blur-xl my-2">
       
       {/* POWER BI SHOWCASE EXECUTIVE HEADER BAR */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-white/10 pb-4">
+      <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 border-b border-white/10 pb-4">
         <div className="flex items-center gap-3">
           <div className="h-10 w-10 rounded-2xl bg-[#FFFF00] text-[#07111F] font-black flex items-center justify-center shadow-[0_0_25px_rgba(255,255,0,0.4)] shrink-0">
             <Icons.powerbi className="h-6 w-6" />
@@ -165,51 +226,70 @@ export function PowerBiZipVisualizer({ reportData }: { reportData?: ZipReportDat
           </div>
         </div>
 
-        {/* View Mode Switcher Tabs */}
-        <div className="flex items-center gap-1.5 bg-[#162133] p-1 rounded-xl border border-white/15 overflow-x-auto scrollbar-none">
+        {/* Action Buttons: Download PBIX Package & Executive Theme JSON */}
+        <div className="flex flex-wrap items-center gap-2">
           <button
-            onClick={() => setActiveTab("visuals")}
-            className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all whitespace-nowrap ${
-              activeTab === "visuals" ? "bg-[#FFFF00] text-[#07111F] shadow-md" : "text-gray-300 hover:text-white"
-            }`}
+            onClick={handleDownloadPackage}
+            className="px-3.5 py-1.5 rounded-xl bg-[#FFFF00] text-[#07111F] hover:bg-[#FFFF00]/90 font-mono font-black text-xs transition-all shadow-lg flex items-center gap-1.5"
           >
-            📊 5 Power BI Visualizations
+            <span>📥 Download Power BI File (.PBIX / ZIP)</span>
           </button>
+
           <button
-            onClick={() => setActiveTab("interpretation")}
-            className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all whitespace-nowrap ${
-              activeTab === "interpretation" ? "bg-[#FFFF00] text-[#07111F] shadow-md" : "text-gray-300 hover:text-white"
-            }`}
+            onClick={handleDownloadThemeJson}
+            className="px-3.5 py-1.5 rounded-xl bg-[#162133] text-white hover:bg-white/10 border border-white/20 font-mono font-bold text-xs transition-all flex items-center gap-1.5"
           >
-            🧠 4-Question Executive Story
-          </button>
-          <button
-            onClick={() => setActiveTab("recommendations")}
-            className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all whitespace-nowrap ${
-              activeTab === "recommendations" ? "bg-[#FFFF00] text-[#07111F] shadow-md" : "text-gray-300 hover:text-white"
-            }`}
-          >
-            💡 Actionable Proposals
+            <span>🎨 Download Executive Theme (.JSON)</span>
           </button>
         </div>
       </div>
 
       {/* EXECUTIVE BOOKMARK NAVIGATION TABS */}
-      <div className="flex items-center gap-2 overflow-x-auto scrollbar-none pb-1">
-        <span className="text-[10px] font-mono text-[#FFFF00] font-bold uppercase shrink-0">Report Bookmark:</span>
-        {reportPages.map((page, idx) => (
+      <div className="flex items-center justify-between gap-2 border-b border-white/10 pb-3">
+        <div className="flex items-center gap-2 overflow-x-auto scrollbar-none">
+          <span className="text-[10px] font-mono text-[#FFFF00] font-bold uppercase shrink-0">Report Bookmark:</span>
+          {reportPages.map((page, idx) => (
+            <button
+              key={page.id}
+              onClick={() => setSelectedPageIndex(idx)}
+              className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap ${
+                idx === selectedPageIndex
+                  ? "bg-[#FFFF00] text-[#07111F] shadow-md scale-[1.02]"
+                  : "bg-[#162133] border border-white/10 text-gray-300 hover:text-white"
+              }`}
+            >
+              {page.displayName}
+            </button>
+          ))}
+        </div>
+
+        {/* View Mode Switcher Tabs */}
+        <div className="flex items-center gap-1 bg-[#162133] p-1 rounded-xl border border-white/15 shrink-0">
           <button
-            key={page.id}
-            onClick={() => setSelectedPageIndex(idx)}
-            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap ${
-              idx === selectedPageIndex
-                ? "bg-[#FFFF00] text-[#07111F] shadow-md scale-[1.02]"
-                : "bg-[#162133] border border-white/10 text-gray-300 hover:text-white"
+            onClick={() => setActiveTab("visuals")}
+            className={`px-3 py-1 rounded-lg text-xs font-bold transition-all whitespace-nowrap ${
+              activeTab === "visuals" ? "bg-[#FFFF00] text-[#07111F]" : "text-gray-300 hover:text-white"
             }`}
           >
-            {page.displayName}
+            📊 Visuals
           </button>
-        ))}
+          <button
+            onClick={() => setActiveTab("interpretation")}
+            className={`px-3 py-1 rounded-lg text-xs font-bold transition-all whitespace-nowrap ${
+              activeTab === "interpretation" ? "bg-[#FFFF00] text-[#07111F]" : "text-gray-300 hover:text-white"
+            }`}
+          >
+            🧠 4-Question Story
+          </button>
+          <button
+            onClick={() => setActiveTab("recommendations")}
+            className={`px-3 py-1 rounded-lg text-xs font-bold transition-all whitespace-nowrap ${
+              activeTab === "recommendations" ? "bg-[#FFFF00] text-[#07111F]" : "text-gray-300 hover:text-white"
+            }`}
+          >
+            💡 Proposals
+          </button>
+        </div>
       </div>
 
       {/* POWER BI INTERACTIVE SLICERS & FILTERS BAR */}
