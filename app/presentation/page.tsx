@@ -354,8 +354,19 @@ export default function PresentationPage() {
         </Button>
       </div>
 
-      {/* Main Slide Card (Full-Height Viewport Container) */}
+      {/* Main Slide Card (Full-Height Viewport Container with Heading Banner) */}
       <div className="flex-1 flex flex-col justify-center items-center overflow-y-auto py-1 w-full max-w-7xl mx-auto scrollbar-none">
+        {currentSlide !== 0 && (
+          <div className="text-center py-1.5 px-4 bg-card/60 border border-surface rounded-xl flex-none mb-2 w-full max-w-4xl space-y-0.5 shadow-sm">
+            <h1 className="text-base sm:text-lg md:text-xl font-display font-extrabold text-foreground tracking-tight">
+              {slide.title}
+            </h1>
+            {slide.subtitle && (
+              <p className="text-[11px] font-mono text-foreground-secondary truncate">{slide.subtitle}</p>
+            )}
+          </div>
+        )}
+
         <div className="w-full my-auto">
           {slide.content}
         </div>

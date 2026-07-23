@@ -25,25 +25,34 @@ export function DataUnderstandingStage() {
   const [serverStats, setServerStats] = React.useState<{
     totalRecords: string
     linkedTables: string
-    datasetRecords: Record<string, string>
   } | null>(null)
+  const [dynamicDatasets, setDynamicDatasets] = React.useState<DatasetNode[]>([])
 
   React.useEffect(() => {
     fetch("/api/cms/datasets")
       .then(res => res.json())
       .then(data => {
         if (data.success) {
-          const recMap: Record<string, string> = {}
-          if (Array.isArray(data.datasets)) {
-            data.datasets.forEach((d: any) => {
-              recMap[d.num] = d.records
-            })
-          }
           setServerStats({
             totalRecords: data.totalRecords,
-            linkedTables: data.linkedTables,
-            datasetRecords: recMap
+            linkedTables: data.linkedTables
           })
+          if (Array.isArray(data.datasets) && data.datasets.length > 0) {
+            const mappedNodes: DatasetNode[] = data.datasets.map((d: any) => ({
+              num: d.num,
+              title: d.title,
+              records: d.records,
+              fields: Array.isArray(d.fields) ? d.fields : ["Record ID", "Attributes"],
+              color: d.color || "#06b6d4",
+              bgColor: d.bgColor || "bg-cyan-950/60",
+              borderColor: d.borderColor || "border-cyan-500",
+              textColor: d.textColor || "text-cyan-400",
+              glowColor: d.glowColor || "shadow-[0_0_30px_rgba(6,182,212,0.6)]",
+              icon: Icons.datasets,
+              desc: d.desc || "Uploaded dataset telemetry feed."
+            }))
+            setDynamicDatasets(mappedNodes)
+          }
         }
       })
       .catch(() => {})
@@ -53,7 +62,7 @@ export function DataUnderstandingStage() {
     {
       num: "01",
       title: "Daily Trips Telemetry",
-      records: serverStats?.datasetRecords["01"] || "4,200 Records",
+      records: "4,200 Records",
       fields: ["Vehicle ID", "GPS Latitude/Longitude", "Speed (km/h)", "Passenger Count"],
       color: "#8b5cf6", // Purple
       bgColor: "bg-purple-950/60",
@@ -66,7 +75,7 @@ export function DataUnderstandingStage() {
     {
       num: "02",
       title: "Ticket Transactions",
-      records: serverStats?.datasetRecords["02"] || "3,800 Records",
+      records: "3,800 Records",
       fields: ["Card Tap-In/Out", "Fare Type", "Amount (NGN)", "Corridor ID"],
       color: "#10b981", // Emerald
       bgColor: "bg-emerald-950/60",
@@ -79,7 +88,7 @@ export function DataUnderstandingStage() {
     {
       num: "03",
       title: "Fleet Maintenance Logs",
-      records: serverStats?.datasetRecords["03"] || "1,500 Records",
+      records: "1,500 Records",
       fields: ["Bus ID", "Repair Date", "Breakdown Cause", "Maintenance Cost"],
       color: "#f59e0b", // Amber
       bgColor: "bg-amber-950/60",
@@ -92,7 +101,7 @@ export function DataUnderstandingStage() {
     {
       num: "04",
       title: "Bus Routes & Corridors",
-      records: serverStats?.datasetRecords["04"] || "800 Records",
+      records: "800 Records",
       fields: ["Origin - Destination", "Distance (km)", "Peak Travel Time", "Corridor Status"],
       color: "#06b6d4", // Cyan
       bgColor: "bg-cyan-950/60",
@@ -105,7 +114,7 @@ export function DataUnderstandingStage() {
     {
       num: "05",
       title: "Vehicle Fleet Register",
-      records: serverStats?.datasetRecords["05"] || "1,200 Records",
+      records: "1,200 Records",
       fields: ["Vehicle Class", "Seating Capacity", "Fuel Consumption", "Operational Status"],
       color: "#f43f5e", // Rose
       bgColor: "bg-rose-950/60",
@@ -117,7 +126,7 @@ export function DataUnderstandingStage() {
     }
   ]
 
-  const datasets = defaultDatasets
+  const datasets = dynamicDatasets.length > 0 ? dynamicDatasets : defaultDatasets
 
   // Auto-cycle through the 5 datasets
   React.useEffect(() => {
@@ -175,15 +184,14 @@ export function DataUnderstandingStage() {
         {/* TOP / CENTER MATRIX GRID */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center relative z-10">
           
-          {/* LEFT 3 DATASETS */}
+          {/* LEFT COLUMN DATASETS */}
           <div className="md:col-span-4 space-y-3">
-            {[datasets[0], datasets[1], datasets[2]].map((ds, idx) => {
+            {datasets.slice(0, Math.ceil(datasets.length / 2)).map((ds, idx) => {
               const isHighlighted = currentHighlight === idx
-              const IconComp = ds.icon
 
               return (
                 <div
-                  key={ds.num}
+                  key={ds.num || idx}
                   onMouseEnter={() => setHoveredDataset(idx)}
                   onMouseLeave={() => setHoveredDataset(null)}
                   className={`p-3.5 rounded-2xl border transition-all duration-500 cursor-pointer space-y-1.5 ${
@@ -221,22 +229,21 @@ export function DataUnderstandingStage() {
                 </span>
                 <span className="text-[11px] font-semibold text-gray-200">Operational Records</span>
                 <span className="text-[9px] font-mono text-amber-400 font-bold bg-black/60 px-2.5 py-0.5 rounded-full border border-amber-400/40">
-                  {serverStats?.linkedTables || "5 LINKED TABLES"}
+                  {serverStats?.linkedTables || `${datasets.length} LINKED TABLES`}
                 </span>
               </div>
             </div>
           </div>
 
-          {/* RIGHT 2 DATASETS + ACTIVE BREAKDOWN */}
+          {/* RIGHT COLUMN DATASETS */}
           <div className="md:col-span-4 space-y-3">
-            {[datasets[3], datasets[4]].map((ds, idxOffset) => {
-              const idx = idxOffset + 3
+            {datasets.slice(Math.ceil(datasets.length / 2)).map((ds, idxOffset) => {
+              const idx = idxOffset + Math.ceil(datasets.length / 2)
               const isHighlighted = currentHighlight === idx
-              const IconComp = ds.icon
 
               return (
                 <div
-                  key={ds.num}
+                  key={ds.num || idx}
                   onMouseEnter={() => setHoveredDataset(idx)}
                   onMouseLeave={() => setHoveredDataset(null)}
                   className={`p-3.5 rounded-2xl border transition-all duration-500 cursor-pointer space-y-1.5 ${

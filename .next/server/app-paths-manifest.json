@@ -2,6 +2,5 @@
   "/page": "app/page.js",
   "/presentation/page": "app/presentation/page.js",
   "/p/powerbi-dashboards/page": "app/p/powerbi-dashboards/page.js",
-  "/p/executive-summary/page": "app/p/executive-summary/page.js",
-  "/api/cms/datasets/route": "app/api/cms/datasets/route.js"
+  "/p/executive-summary/page": "app/p/executive-summary/page.js"
 }

@@ -83,7 +83,7 @@ export function TeamMembersGrid({
   )
 
   return (
-    <div className="w-full rounded-3xl bg-gradient-to-b from-[#0f172a] via-[#1e293b] to-[#0f172a] p-6 md:p-10 border border-white/10 shadow-2xl space-y-8 my-4">
+    <div className="w-full rounded-3xl bg-gradient-to-b from-sky-900 via-blue-900 to-sky-950 p-6 md:p-10 border border-sky-400/30 shadow-2xl space-y-8 my-4">
       {/* Header Banner */}
       <div className="text-center space-y-2">
         <div className="inline-block px-6 py-1.5 rounded-xl bg-white text-slate-900 font-display font-extrabold text-2xl md:text-3xl tracking-tight shadow-md">
