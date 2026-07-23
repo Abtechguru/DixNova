@@ -38,7 +38,7 @@ export default async function PublicCMSDynamicPage({ params }: Props) {
       notFound()
     }
 
-    blocks = page.components as PageBlock[]
+    blocks = (page.components as unknown) as PageBlock[]
   } catch (e: any) {
     error = e.message
   }
