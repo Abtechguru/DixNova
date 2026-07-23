@@ -11,6 +11,7 @@ import { ProjectObjectivesGrid } from "@/components/cms/ProjectObjectivesGrid"
 import { AnalyticsMaturityJourney } from "@/components/cms/AnalyticsMaturityJourney"
 import { BiggerRealityVideoStage } from "@/components/cms/BiggerRealityVideoStage"
 import { PresentationPowerBiStage } from "@/components/cms/PresentationPowerBiStage"
+import { ExecutiveSummaryStage } from "@/components/cms/ExecutiveSummaryStage"
 
 interface Slide {
   stage: string
@@ -53,75 +54,8 @@ export default function PresentationPage() {
       title: "Executive Summary",
       subtitle: "Group 10 Hackathon Submission | Data Coverage: Jan 2022 – Dec 2024",
       content: (
-        <div className="relative w-full max-w-4xl mx-auto rounded-3xl overflow-hidden border border-white/20 shadow-2xl p-6 sm:p-8 space-y-6 text-foreground bg-black/70 backdrop-blur-md">
-          <img
-            src="/dix0.jpeg"
-            alt="Executive Summary Background"
-            className="absolute inset-0 w-full h-full object-cover filter brightness-[0.25] scale-105 transform-gpu -z-10"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-transparent -z-10" />
-
-          {/* Header Badge & Title */}
-          <div className="space-y-2 border-b border-white/10 pb-4">
-            <div className="flex flex-wrap items-center gap-2">
-              <Badge variant="default" className="bg-primary text-primary-foreground font-mono text-[10px] font-bold">
-                DIXNOVA GROUP 10
-              </Badge>
-              <span className="text-xs font-mono text-gray-300">
-                Data Coverage: January 2022 – December 2024
-              </span>
-            </div>
-            <h3 className="text-2xl sm:text-3xl font-display font-extrabold text-white tracking-tight">
-              Executive Summary
-            </h3>
-          </div>
-
-          {/* Content Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
-            <div className="space-y-1.5 p-4 rounded-2xl bg-surface/20 border border-white/10">
-              <span className="text-[10px] font-mono font-bold text-primary uppercase">Project Overview</span>
-              <p className="text-xs text-gray-200 leading-relaxed font-sans">
-                Analyzes 3 years of operational data across 5 linked datasets (trips, maintenance, tickets, routes & fleet). Cleans over 11,500 records and visualizes insights in Power BI.
-              </p>
-            </div>
-
-            <div className="space-y-1.5 p-4 rounded-2xl bg-surface/20 border border-rose-500/30 border-l-4 border-l-rose-500">
-              <span className="text-[10px] font-mono font-bold text-rose-400 uppercase">Business Challenge</span>
-              <p className="text-xs text-gray-200 leading-relaxed font-sans">
-                Fragmented systems leave planners without overall performance visibility. Traffic congestion, unpredictable demand, and vehicle breakdowns drive service delays and higher costs.
-              </p>
-            </div>
-
-            <div className="space-y-1.5 p-4 rounded-2xl bg-surface/20 border border-emerald-500/30 border-l-4 border-l-emerald-500 md:col-span-2">
-              <span className="text-[10px] font-mono font-bold text-emerald-400 uppercase">Solution Summary</span>
-              <p className="text-xs text-gray-200 leading-relaxed font-sans">
-                Delivers an end-to-end analytics solution: profiling, cleaning, star-schema modeling in Power BI, and DAX measures translating records into revenue, on-time rate, and fleet utilization KPIs.
-              </p>
-            </div>
-          </div>
-
-          {/* Workflow Diagram Banner */}
-          <div className="p-4 rounded-2xl bg-black/60 border border-surface/50 space-y-2">
-            <span className="text-[10px] font-mono font-bold text-amber-400 uppercase tracking-wider block">
-              Workflow Pipeline
-            </span>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center text-[11px]">
-              <div className="p-2 rounded-lg bg-surface/30">1. Data Ingestion (5 Tables)</div>
-              <div className="p-2 rounded-lg bg-surface/30">2. Clean & Profile (11.5K Records)</div>
-              <div className="p-2 rounded-lg bg-surface/30">3. Power BI & DAX Modeling</div>
-              <div className="p-2 rounded-lg bg-primary/20 text-primary font-bold">4. Decision Control Room</div>
-            </div>
-          </div>
-
-          {/* Call to Action */}
-          <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-3 border-t border-white/10">
-            <p className="text-xs text-gray-300 text-left">
-              <strong>Call to Action:</strong> Supporting a pilot rollout across high-value Express corridors and Lagos Mainland LGA.
-            </p>
-            <Button size="sm" asChild className="text-xs whitespace-nowrap">
-              <Link href="/p/powerbi-dashboards">Open Power BI Control Room ↗</Link>
-            </Button>
-          </div>
+        <div className="w-full max-w-5xl mx-auto">
+          <ExecutiveSummaryStage />
         </div>
       )
     },
