@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Outfit } from "next/font/google";
 import "./globals.css";
+import { ProgramWatermark } from "@/components/layout/ProgramWatermark";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
+const outfit = Outfit({ subsets: ["latin"], variable: "--font-outfit" });
 
 export const metadata: Metadata = {
-  title: "DixNova | Public Transportation Intelligence Platform",
-  description: "Driven by Data — Advanced Public Transportation Analytics & Command Center by DixNova.",
+  title: "DixNova | Transportation Analytics & Decision Intelligence",
+  description: "Enterprise Transportation Analytics & Executive Decision Support Platform by Team DixNova.",
 };
 
 export default function RootLayout({
@@ -18,9 +20,10 @@ export default function RootLayout({
     <html lang="en" className="dark" suppressHydrationWarning>
       <body 
         suppressHydrationWarning 
-        className={`${inter.className} bg-navy-950 text-slate-100 antialiased selection:bg-amber-400 selection:text-slate-950`}
+        className={`${inter.variable} ${outfit.variable} font-sans bg-background text-foreground antialiased selection:bg-primary selection:text-primary-foreground relative`}
       >
         {children}
+        <ProgramWatermark />
       </body>
     </html>
   );

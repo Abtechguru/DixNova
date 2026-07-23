@@ -1,0 +1,632 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+// -----------------------------------------------------------------------------
+// CORE TENANT ENTITIES
+// -----------------------------------------------------------------------------
+
+model Organization {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  name         String
+  slug         String   @unique
+  logoUrl      String?
+  domain       String?  @unique
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  
+  workspaces   Workspace[]
+  projects     Project[]
+  users        UserRole[]
+  auditLogs    AuditLog[]
+  invitations  Invitation[]
+  branding     OrganizationBranding?
+  mediaAssets  MediaAsset[]
+  pages        Page[]
+  navigations  NavigationMenu[]
+
+  fleetTelemetry      FleetTelemetry[]
+  corridorAnalytics   CorridorAnalytics[]
+  revenueTransactions RevenueTransaction[]
+  reportAssets        ReportAsset[]
+  aiSettings          AISettings?
+  aiSessions          AISession[]
+  aiAuditLogs         AIAuditLog[]
+}
+
+model Workspace {
+  id             String       @id @default(auto()) @map("_id") @db.ObjectId
+  organizationId String       @db.ObjectId
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  name           String
+  slug           String
+  description    String?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  
+  projects       Project[]
+  userRoles      UserRole[]
+
+  @@unique([organizationId, slug])
+}
+
+// -----------------------------------------------------------------------------
+// SPRINT 7: AI GOVERNANCE & COPILOT ENTITIES
+// -----------------------------------------------------------------------------
+
+model AISettings {
+  id               String       @id @default(auto()) @map("_id") @db.ObjectId
+  organizationId   String       @unique @db.ObjectId
+  organization     Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  preferredProvider String      @default("FALLBACK") // GEMINI, OPENAI, AZURE_OPENAI, CLAUDE, FALLBACK
+  defaultModel     String       @default("gemini-1.5-pro")
+  temperature      Float        @default(0.2)
+  maxTokens        Int          @default(1024)
+  promptTemplates  Json?
+  
+  updatedAt        DateTime     @updatedAt
+}
+
+model AISession {
+  id             String       @id @default(auto()) @map("_id") @db.ObjectId
+  organizationId String       @db.ObjectId
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  userId         String       @db.ObjectId
+
+  title          String       @default("New AI Copilot Session")
+  isPinned       Boolean      @default(false)
+  messages       AIMessage[]
+
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+}
+
+model AIMessage {
+  id             String    @id @default(auto()) @map("_id") @db.ObjectId
+  sessionId      String    @db.ObjectId
+  session        AISession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  role           String    // user, assistant, system
+  content        String
+  provider       String?   // GEMINI, OPENAI, FALLBACK
+  model          String?
+  latencyMs      Int?
+
+  createdAt      DateTime  @default(now())
+}
+
+model AIAuditLog {
+  id             String       @id @default(auto()) @map("_id") @db.ObjectId
+  organizationId String       @db.ObjectId
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  actorId        String?      @db.ObjectId
+
+  provider       String
+  model          String
+  promptTokens   Int?
+  completionTokens Int?
+  latencyMs      Int
+  status         String       @default("SUCCESS") // SUCCESS, ERROR, RATE_LIMITED
+
+  createdAt      DateTime     @default(now())
+}
+
+// -----------------------------------------------------------------------------
+// SPRINT 5: GOVERNED ANALYTICS & BI ENGINE ENTITIES
+// -----------------------------------------------------------------------------
+
+model DataQualityScorecard {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  datasetId      String   @unique @db.ObjectId
+  dataset        Dataset  @relation(fields: [datasetId], references: [id], onDelete: Cascade)
+
+  completeness   Float    
+  consistency    Float    
+  uniqueness     Float    
+  accuracy       Float    
+  validity       Float    
+  timeliness     Float    
+  overallScore   Float    
+
+  validationLogs DatasetValidationLog[]
+  updatedAt      DateTime @updatedAt
+}
+
+model DatasetValidationLog {
+  id               String               @id @default(auto()) @map("_id") @db.ObjectId
+  datasetId        String               @db.ObjectId
+  dataset          Dataset              @relation(fields: [datasetId], references: [id], onDelete: Cascade)
+  qualityScorecard DataQualityScorecard? @relation(fields: [scorecardId], references: [id])
+  scorecardId      String?              @db.ObjectId
+
+  ruleName         String               
+  status           String               
+  message          String
+  affectedRows     Int                  @default(0)
+  createdAt        DateTime             @default(now())
+}
+
+model ReportAsset {
+  id             String       @id @default(auto()) @map("_id") @db.ObjectId
+  organizationId String       @db.ObjectId
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  projectId      String?      @db.ObjectId
+
+  title          String
+  description    String?
+  format         String       
+  fileUrl        String
+  sizeBytes      Int
+  version        Int          @default(1)
+  category       String?
+
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+}
+
+model FleetTelemetry {
+  id             String       @id @default(auto()) @map("_id") @db.ObjectId
+  organizationId String       @db.ObjectId
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  vehicleId      String
+  vehicleType    String       
+  driverName     String?
+  speedKmh       Float
+  latitude       Float
+  longitude      Float
+  fuelLevelPct   Float
+  passengerCount Int
+  status         String       
+  heading        Float        @default(0)
+
+  timestamp      DateTime     @default(now())
+
+  @@index([organizationId, vehicleId, timestamp])
+}
+
+model CorridorAnalytics {
+  id             String       @id @default(auto()) @map("_id") @db.ObjectId
+  organizationId String       @db.ObjectId
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  corridorName   String       
+  origin         String
+  destination    String
+  distanceKm     Float
+  avgSpeedKmh    Float
+  congestionScore Int         
+  travelTimeMin  Float
+  delayMinutes   Float
+  activeVehicles Int
+  statusLevel    String       
+
+  timestamp      DateTime     @default(now())
+
+  @@index([organizationId, corridorName, timestamp])
+}
+
+model RevenueTransaction {
+  id             String       @id @default(auto()) @map("_id") @db.ObjectId
+  organizationId String       @db.ObjectId
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  corridorName   String
+  fareType       String       
+  vehicleClass   String       
+  passengerCount Int
+  amountNgn      Float
+  status         String       
+
+  timestamp      DateTime     @default(now())
+
+  @@index([organizationId, timestamp])
+}
+
+model Project {
+  id               String       @id @default(auto()) @map("_id") @db.ObjectId
+  organizationId   String       @db.ObjectId
+  organization     Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  workspaceId      String       @db.ObjectId
+  workspace        Workspace    @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  
+  name             String
+  slug             String
+  client           String?
+  description      String?
+  category         String?
+  tags             String[]
+  startDate        DateTime?
+  endDate          DateTime?
+  bannerUrl        String?
+  logoUrl          String?
+  
+  status           ProjectStatus @default(DRAFT)
+  visibility       String       @default("INTERNAL")
+  isPublished      Boolean      @default(false)
+  
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+  
+  userRoles        UserRole[]
+  
+  executiveSummary ExecutiveSummary?
+  problemStatement ProblemStatement?
+  objectives       Objective[]
+  
+  datasets         Dataset[]
+  kpis             Kpi[]
+  powerBiReports   PowerBiReport[]
+  insights         Insight[]
+  recommendations  Recommendation[]
+  
+  @@unique([workspaceId, slug])
+}
+
+model ExecutiveSummary {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  projectId      String   @unique @db.ObjectId
+  project        Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  contentJson    Json?    
+  contentHtml    String?
+  version        Int      @default(1)
+  updatedAt      DateTime @updatedAt
+}
+
+model ProblemStatement {
+  id               String   @id @default(auto()) @map("_id") @db.ObjectId
+  projectId        String   @unique @db.ObjectId
+  project          Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  businessChallenge String?
+  background       String?
+  currentSituation String?
+  painPoints       String[]
+  scope            String?
+  successCriteria  String[]
+  whoDetails       String[]
+  whatDetails      String[]
+  whenDetails      String[]
+  whereDetails     String[]
+  whyDetails       String[]
+  fiveWsJson       Json?
+  updatedAt        DateTime @updatedAt
+}
+
+model Objective {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  projectId      String   @db.ObjectId
+  project        Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  type           String   
+  title          String
+  description    String?
+  targetValue    String?
+  status         String   @default("PENDING")
+  displayOrder   Int      @default(0)
+}
+
+model Dataset {
+  id               String   @id @default(auto()) @map("_id") @db.ObjectId
+  projectId        String   @db.ObjectId
+  project          Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  name             String
+  category         String?
+  description      String?
+  fileUrl          String?
+  fileFormat       String?  
+  rowCount         Int?
+  columnCount      Int?
+  qualityScore     Float?
+  pipelineStage    String   @default("UPLOADED")
+  metadata         Json?
+  
+  dataPreparation  DataPreparation?
+  dataModel        DataModel?
+  qualityScorecard DataQualityScorecard?
+  validationLogs   DatasetValidationLog[]
+  
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+model DataPreparation {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  datasetId      String   @unique @db.ObjectId
+  dataset        Dataset  @relation(fields: [datasetId], references: [id], onDelete: Cascade)
+  cleaningSteps  String[]
+  transformations String[]
+  missingValues  String?
+  outlierHandling String?
+  businessRules  String[]
+}
+
+model DataModel {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  datasetId      String   @unique @db.ObjectId
+  dataset        Dataset  @relation(fields: [datasetId], references: [id], onDelete: Cascade)
+  schemaType     String   
+  factTables     String[]
+  dimTables      String[]
+  measures       String[]
+  diagramUrl     String?
+}
+
+model Kpi {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  projectId      String   @db.ObjectId
+  project        Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  name           String
+  category       String?
+  groupName      String?
+  description    String?
+  formula        String?
+  powerBiMeasure String?
+  targetValue    Float?
+  currentValue   Float?
+  unit           String?  
+  trend          String?  
+  thresholdMin   Float?
+  thresholdMax   Float?
+  alertRule      String?
+  displayOrder   Int      @default(0)
+  visibility     Boolean  @default(true)
+}
+
+model PowerBiReport {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  projectId      String   @db.ObjectId
+  project        Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  name           String
+  category       String?
+  description    String?
+  workspaceId    String   
+  reportId       String   
+  embedUrl       String?
+  thumbnailUrl   String?
+  refreshSchedule String?
+  securityRole   String?
+  displayOrder   Int      @default(0)
+  isPublished    Boolean  @default(false)
+}
+
+model Insight {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  projectId      String   @db.ObjectId
+  project        Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  title          String
+  category       String?
+  description    String
+  dashboardRef   String?
+  priority       String   @default("MEDIUM")
+  businessImpact String?
+  createdAt      DateTime @default(now())
+}
+
+model Recommendation {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  projectId      String   @db.ObjectId
+  project        Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  title          String
+  description    String
+  priority       String   @default("MEDIUM")
+  impactEstimate String?
+  costEstimate   String?
+  timeline       String?
+  department     String?
+  status         String   @default("OPEN")
+}
+
+model Page {
+  id             String       @id @default(auto()) @map("_id") @db.ObjectId
+  organizationId String       @db.ObjectId
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  
+  title          String
+  slug           String
+  components     Json         
+  
+  metaTitle       String?
+  metaDescription String?
+  keywords        String?
+  ogImage         String?
+  isPublished     Boolean      @default(false)
+  
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  @@unique([organizationId, slug])
+}
+
+model NavigationMenu {
+  id             String       @id @default(auto()) @map("_id") @db.ObjectId
+  organizationId String       @db.ObjectId
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  
+  name           String       
+  items          Json         
+  
+  @@unique([organizationId, name])
+}
+
+model MediaAsset {
+  id             String       @id @default(auto()) @map("_id") @db.ObjectId
+  organizationId String       @db.ObjectId
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  
+  filename       String
+  url            String
+  fileType       String       
+  sizeBytes      Int
+  tags           String[]
+  folder         String       @default("/")
+  
+  createdAt      DateTime     @default(now())
+}
+
+// -----------------------------------------------------------------------------
+// USER & SYSTEM ENTITIES
+// -----------------------------------------------------------------------------
+
+model User {
+  id            String       @id @default(auto()) @map("_id") @db.ObjectId
+  email         String       @unique
+  passwordHash  String?
+  name          String?
+  avatarUrl     String?
+  bio           String?
+  skills        String[]
+  
+  status        SystemStatus @default(ACTIVE)
+  emailVerified DateTime?
+  lastLoginAt   DateTime?
+  
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  
+  roles         UserRole[]
+  sessions      Session[]
+  notifications Notification[]
+  auditLogs     AuditLog[]
+  preferences   UserSettings?
+}
+
+model Session {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId       String   @db.ObjectId
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  token        String   @unique
+  expiresAt    DateTime
+  userAgent    String?
+  ipAddress    String?
+  createdAt    DateTime @default(now())
+  
+  @@index([userId])
+}
+
+model UserRole {
+  id             String        @id @default(auto()) @map("_id") @db.ObjectId
+  userId         String        @db.ObjectId
+  user           User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  organizationId String?       @db.ObjectId
+  organization   Organization? @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  workspaceId    String?       @db.ObjectId
+  workspace      Workspace?    @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  projectId      String?       @db.ObjectId
+  project        Project?      @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  
+  role           Role
+  
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  @@unique([userId, organizationId, workspaceId, projectId, role])
+}
+
+model Invitation {
+  id             String       @id @default(auto()) @map("_id") @db.ObjectId
+  email          String
+  organizationId String       @db.ObjectId
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  role           Role
+  token          String       @unique
+  expiresAt      DateTime
+  createdAt      DateTime     @default(now())
+  
+  @@index([organizationId])
+}
+
+model AuditLog {
+  id             String        @id @default(auto()) @map("_id") @db.ObjectId
+  organizationId String?       @db.ObjectId
+  organization   Organization? @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  actorId        String?       @db.ObjectId
+  actor          User?         @relation(fields: [actorId], references: [id], onDelete: SetNull)
+  
+  action         String        
+  targetId       String?       
+  targetType     String?       
+  metadata       Json?         
+  
+  ipAddress      String?
+  createdAt      DateTime      @default(now())
+  
+  @@index([organizationId, createdAt])
+}
+
+model Notification {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId         String   @db.ObjectId
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title          String
+  message        String
+  type           String   
+  read           Boolean  @default(false)
+  link           String?
+  
+  createdAt      DateTime @default(now())
+}
+
+model UserSettings {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId         String   @unique @db.ObjectId
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  theme          String   @default("system")
+  language       String   @default("en")
+  emailAlerts    Boolean  @default(true)
+}
+
+model OrganizationBranding {
+  id             String       @id @default(auto()) @map("_id") @db.ObjectId
+  organizationId String       @unique @db.ObjectId
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  primaryColor   String?
+  accentColor    String?
+  faviconUrl     String?
+}
+
+// -----------------------------------------------------------------------------
+// ENUMS
+// -----------------------------------------------------------------------------
+
+enum SystemStatus {
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+  ARCHIVED
+}
+
+enum ProjectStatus {
+  DRAFT
+  REVIEW
+  PUBLISHED
+  ARCHIVED
+}
+
+enum Role {
+  SUPER_ADMIN
+  ORG_ADMIN
+  PROJECT_MANAGER
+  DATA_ANALYST
+  BUSINESS_ANALYST
+  DASHBOARD_MANAGER
+  CONTENT_EDITOR
+  VIEWER
+  JUDGE
+}
+
+model TeamMember {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  role        String
+  bio         String?
+  avatarUrl   String?
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}

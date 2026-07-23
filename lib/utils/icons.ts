@@ -1,0 +1,60 @@
+import {
+  LayoutDashboard,
+  FolderOpen,
+  Database,
+  Target,
+  BarChart4,
+  Lightbulb,
+  CheckSquare,
+  FileText,
+  Image as ImageIcon,
+  Globe,
+  Users,
+  Building2,
+  Settings,
+  Bell,
+  Sparkles,
+  Search,
+  Menu,
+  X,
+  ChevronDown,
+  ChevronRight,
+  MoreVertical,
+  LogOut,
+  Loader2
+} from "lucide-react";
+
+export const Icons = {
+  // Modules
+  dashboard: LayoutDashboard,
+  projects: FolderOpen,
+  datasets: Database,
+  kpis: Target,
+  powerbi: BarChart4,
+  insights: Lightbulb,
+  recommendations: CheckSquare,
+  reports: FileText,
+  media: ImageIcon,
+  website: Globe,
+  users: Users,
+  organizations: Building2,
+  settings: Settings,
+  notifications: Bell,
+  ai: Sparkles,
+
+  // UI Elements
+  search: Search,
+  menu: Menu,
+  close: X,
+  chevronDown: ChevronDown,
+  chevronRight: ChevronRight,
+  moreVertical: MoreVertical,
+  logout: LogOut,
+  loader: Loader2,
+  sparkles: Sparkles,
+
+  // Aliases for safe rendering
+  revenue: Target,
+  kpi: Target,
+  brain: Sparkles,
+};

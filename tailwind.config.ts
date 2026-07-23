@@ -10,23 +10,34 @@ const config: Config = {
     extend: {
       colors: {
         background: "var(--background)",
+        surface: "var(--surface)",
         foreground: "var(--foreground)",
-        navy: {
-          50: '#f0f4f9',
-          100: '#dce5f1',
-          200: '#becfe2',
-          300: '#91b0cc',
-          400: '#5f8cb3',
-          500: '#3e709a',
-          600: '#2c5980',
-          700: '#244869',
-          800: '#1f3e58',
-          900: '#0b1f3a', // Deep Navy
-          950: '#071325',
+        "foreground-secondary": "var(--foreground-secondary)",
+        primary: {
+          DEFAULT: "var(--primary)",
+          foreground: "var(--primary-foreground)",
         },
-        primary: "#2563EB", // Blue
+        secondary: {
+          DEFAULT: "var(--secondary)",
+          foreground: "var(--secondary-foreground)",
+        },
+        accent: "var(--accent)",
         success: "#10B981", // Emerald
         warning: "#F97316", // Orange
+        danger: "#EF4444",  // Red
+      },
+      fontFamily: {
+        sans: ["var(--font-inter)", "sans-serif"],
+        display: ["var(--font-outfit)", "sans-serif"],
+      },
+      boxShadow: {
+        'soft': '0 4px 20px -2px rgba(0, 0, 0, 0.05)',
+        'soft-lg': '0 10px 30px -3px rgba(0, 0, 0, 0.08)',
+        'glass': '0 4px 30px rgba(0, 0, 0, 0.1)',
+      },
+      borderRadius: {
+        'xl': '1rem',
+        '2xl': '1.25rem',
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",

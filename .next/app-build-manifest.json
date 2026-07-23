@@ -1,100 +1,95 @@
 {
   "pages": {
-    "/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/page.js"
-    ],
     "/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
     ],
+    "/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/page.js"
+    ],
     "/problem-statement/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/problem-statement/page.js"
     ],
-    "/admin/page": [
+    "/(auth)/login/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/admin/page.js"
+      "static/chunks/app/(auth)/login/page.js"
     ],
-    "/admin/layout": [
+    "/(auth)/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/admin/layout.js"
+      "static/chunks/app/(auth)/layout.js"
     ],
-    "/admin/data/page": [
+    "/(auth)/register/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/admin/data/page.js"
+      "static/chunks/app/(auth)/register/page.js"
     ],
-    "/data-preparation/page": [
+    "/p/executive-summary/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/data-preparation/page.js"
+      "static/chunks/app/p/executive-summary/page.js"
     ],
-    "/dashboard/page": [
+    "/p/problem-statement/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/dashboard/page.js"
+      "static/chunks/app/p/problem-statement/page.js"
     ],
-    "/solution/page": [
+    "/p/analytics-journey/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/solution/page.js"
+      "static/chunks/app/p/analytics-journey/page.js"
     ],
-    "/team/page": [
+    "/not-found": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/team/page.js"
+      "static/chunks/app/not-found.js"
     ],
-    "/admin/team/page": [
+    "/error": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/admin/team/page.js"
+      "static/chunks/app/error.js"
     ],
-    "/admin/login/page": [
+    "/presentation/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/admin/login/page.js"
+      "static/chunks/app/presentation/page.js"
     ],
-    "/about-smartmove/page": [
+    "/demo/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/about-smartmove/page.js"
+      "static/chunks/app/demo/page.js"
     ],
-    "/executive-summary/page": [
+    "/p/kpi-framework/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/executive-summary/page.js"
+      "static/chunks/app/p/kpi-framework/page.js"
     ],
-    "/objectives/page": [
+    "/p/powerbi-dashboards/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/objectives/page.js"
+      "static/chunks/app/p/powerbi-dashboards/page.js"
     ],
-    "/dataset-overview/page": [
+    "/p/insights/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/dataset-overview/page.js"
+      "static/chunks/app/p/insights/page.js"
     ],
-    "/data-modeling/page": [
+    "/p/recommendations/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/data-modeling/page.js"
+      "static/chunks/app/p/recommendations/page.js"
     ],
-    "/admin/settings/page": [
+    "/_not-found/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/admin/settings/page.js"
-    ],
-    "/admin/problems/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/admin/problems/page.js"
+      "static/chunks/app/_not-found/page.js"
     ]
   }
 }
