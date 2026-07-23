@@ -1,6 +1,8 @@
 {
-  "/p/executive-summary/page": "app/p/executive-summary/page.js",
   "/presentation/page": "app/presentation/page.js",
-  "/p/powerbi-dashboards/page": "app/p/powerbi-dashboards/page.js",
-  "/page": "app/page.js"
+  "/page": "app/page.js",
+  "/api/cms/datasets/route": "app/api/cms/datasets/route.js",
+  "/api/cms/powerbi/route": "app/api/cms/powerbi/route.js",
+  "/api/cms/team-members/route": "app/api/cms/team-members/route.js",
+  "/_not-found/page": "app/_not-found/page.js"
 }

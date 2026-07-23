@@ -3,7 +3,7 @@ import type { NextRequest } from "next/server"
 import { decrypt, updateSession } from "@/lib/auth/session"
 
 // Routes that do not require authentication
-const publicRoutes = ["/", "/login", "/register", "/design-system", "/api/auth/login", "/api/auth/register"]
+const publicRoutes = ["/", "/presentation", "/p", "/admin", "/login", "/register", "/design-system", "/api"]
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
