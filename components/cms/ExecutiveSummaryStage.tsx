@@ -11,13 +11,13 @@ export function ExecutiveSummaryStage() {
   const [isAutoPlaying, setIsAutoPlaying] = React.useState<boolean>(true)
   const [hoveredCard, setHoveredCard] = React.useState<number | null>(null)
 
-  // Auto-cycle through the 5 portrait cards every 3.5 seconds
+  // Auto-cycle through cards
   React.useEffect(() => {
     if (!isAutoPlaying || hoveredCard !== null) return
 
     const interval = setInterval(() => {
       setActiveCard((prev) => (prev + 1) % 5)
-    }, 3500)
+    }, 3800)
 
     return () => clearTimeout(interval)
   }, [isAutoPlaying, hoveredCard])
@@ -25,206 +25,200 @@ export function ExecutiveSummaryStage() {
   const currentHighlight = hoveredCard !== null ? hoveredCard : activeCard
 
   return (
-    <div className="relative w-full h-[76vh] min-h-[500px] max-h-[750px] rounded-3xl overflow-hidden border border-white/20 shadow-2xl flex flex-col justify-between p-4 sm:p-6 bg-black">
-      {/* Background Image with Backdrop Overlay */}
-      <img
-        src="/dix0.jpeg"
-        alt="Executive Summary Backdrop"
-        className="absolute inset-0 w-full h-full object-cover filter brightness-[0.2] scale-105 transform-gpu -z-10 transition-all duration-700"
-      />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/75 to-black/50 -z-10" />
-
+    <div className="relative w-full rounded-3xl overflow-hidden border border-white/10 shadow-2xl flex flex-col justify-between p-6 sm:p-8 bg-[#07111F]/90 backdrop-blur-xl my-2 space-y-6">
+      
       {/* Top Banner Header */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-white/15 pb-3 flex-none z-10">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-white/10 pb-4 flex-none">
         <div className="space-y-1">
           <div className="flex flex-wrap items-center gap-2">
-            <Badge variant="default" className="bg-primary text-primary-foreground font-mono text-[10px] font-bold">
-              GROUP 10 HACKATHON SUBMISSION
+            <Badge variant="default" className="bg-[#FFFF00] text-[#07111F] font-mono text-[10px] font-black tracking-wide">
+              TEAM DIXNOVA • GROUP 10
             </Badge>
 
-            <Badge variant="outline" className="bg-black/60 backdrop-blur-md text-gray-300 border-white/20 text-[10px] font-mono">
-              Jan 2022 – Dec 2024 Data
+            <Badge variant="outline" className="bg-[#162133] text-cyan-300 border-cyan-500/30 text-[10px] font-mono">
+              Jan 2022 – Dec 2024 Operations Data
             </Badge>
 
-            {/* Auto-Glow Toggle */}
+            {/* Auto-Cycle Toggle */}
             <button
               onClick={() => setIsAutoPlaying(!isAutoPlaying)}
-              className="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-gray-200 transition-all flex items-center gap-1"
+              className="text-[10px] font-mono px-3 py-1 rounded-full bg-[#162133] hover:bg-[#162133]/80 border border-white/15 text-foreground-secondary transition-all flex items-center gap-1.5"
             >
-              <span>{isAutoPlaying ? "⏸ Auto-Glow Active" : "▶ Resume Auto-Glow"}</span>
+              <span className="h-2 w-2 rounded-full bg-[#FFFF00] animate-ping" />
+              <span>{isAutoPlaying ? "⏸ Keynote Auto-Cycle Active" : "▶ Resume Auto-Cycle"}</span>
             </button>
           </div>
 
-          <h2 className="text-xl sm:text-2xl font-display font-black text-white tracking-tight drop-shadow-md">
-            DIXNOVA Executive Summary
+          <h2 className="text-xl sm:text-2xl font-display font-extrabold text-white tracking-tight pt-1">
+            Executive Briefing Summary
           </h2>
         </div>
 
         {/* Counter Badge */}
-        <div className="flex items-center gap-1.5 bg-black/70 backdrop-blur-md px-3 py-1 rounded-full border border-white/20 text-[11px] font-mono text-gray-200 self-end sm:self-auto">
-          <span className="h-2 w-2 rounded-full bg-primary animate-ping" />
-          <span>HIGHLIGHTING CARD {currentHighlight + 1} / 5</span>
+        <div className="flex items-center gap-2 bg-[#162133] px-3.5 py-1.5 rounded-full border border-white/15 text-xs font-mono text-foreground-secondary self-end sm:self-auto">
+          <span className="h-2 w-2 rounded-full bg-[#FFFF00]" />
+          <span>KEYNOTE CARD {currentHighlight + 1} / 5</span>
         </div>
       </div>
 
-      {/* 5 PORTRAIT CARDS GRID (100% VISIBLE ON SCREEN) */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 my-auto py-2 z-10 flex-1 h-full items-stretch">
+      {/* 5 FLOATING KEYNOTE CARDS GRID */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 items-stretch">
         
-        {/* PORTRAIT CARD 1: PROJECT OVERVIEW */}
+        {/* CARD 1: PROJECT OVERVIEW */}
         <div
           onMouseEnter={() => setHoveredCard(0)}
           onMouseLeave={() => setHoveredCard(null)}
-          className={`p-4 rounded-2xl border transition-all duration-500 cursor-pointer flex flex-col justify-between h-full ${
+          className={`p-5 rounded-3xl border transition-all duration-500 cursor-pointer flex flex-col justify-between ${
             currentHighlight === 0
-              ? "bg-black/90 border-amber-400 shadow-[0_0_30px_rgba(250,204,21,0.6)] scale-[1.03]"
-              : "bg-black/70 border-white/15 hover:border-amber-400/60 opacity-90"
+              ? "bg-[#162133] border-[#FFFF00] shadow-[0_0_30px_rgba(255,255,0,0.2)] scale-[1.02]"
+              : "bg-[#162133]/70 border-white/10 hover:border-white/30"
           }`}
         >
           <div className="space-y-3">
-            <div className="flex items-center justify-between border-b border-amber-400/30 pb-2">
-              <span className="text-[11px] font-mono font-black text-amber-400 uppercase tracking-widest flex items-center gap-1.5">
-                <span className="h-2 w-2 rounded-full bg-amber-400" />
+            <div className="flex items-center justify-between border-b border-white/10 pb-2">
+              <span className="text-[11px] font-mono font-black text-[#FFFF00] uppercase tracking-widest flex items-center gap-1.5">
+                <span className="h-2 w-2 rounded-full bg-[#FFFF00]" />
                 OVERVIEW
               </span>
-              <span className="text-[10px] font-mono text-gray-400">01</span>
+              <span className="text-[10px] font-mono text-foreground-secondary">01</span>
             </div>
 
-            <h3 className="text-sm font-display font-extrabold text-white">Project Scope & Data</h3>
+            <h3 className="text-base font-display font-bold text-white">Project Scope & Data</h3>
             
-            <p className="text-xs text-gray-200 leading-relaxed font-sans font-medium drop-shadow">
-              Analyzes 3 years of operational data across 5 linked datasets (daily trips, maintenance records, ticket transactions, bus routes & fleet). Cleans over 11,500 records for Power BI modeling.
+            <p className="text-xs text-foreground-secondary leading-relaxed font-sans font-normal">
+              Analyzes 3 years of operational data across 5 linked datasets (daily trips, maintenance, ticket transactions, bus routes & fleet). Profiling over 11,500+ records for Power BI modeling.
             </p>
           </div>
 
-          <div className="pt-3 border-t border-white/10 text-[10px] font-mono text-amber-400 font-bold">
-            Data Coverage: 2022–2024
+          <div className="pt-3 border-t border-white/10 text-[10px] font-mono text-[#FFFF00] font-bold">
+            Data Horizon: 2022–2024
           </div>
         </div>
 
-        {/* PORTRAIT CARD 2: BUSINESS CHALLENGE */}
+        {/* CARD 2: BUSINESS CHALLENGE */}
         <div
           onMouseEnter={() => setHoveredCard(1)}
           onMouseLeave={() => setHoveredCard(null)}
-          className={`p-4 rounded-2xl border transition-all duration-500 cursor-pointer flex flex-col justify-between h-full ${
+          className={`p-5 rounded-3xl border transition-all duration-500 cursor-pointer flex flex-col justify-between ${
             currentHighlight === 1
-              ? "bg-black/90 border-rose-500 shadow-[0_0_30px_rgba(244,63,94,0.6)] scale-[1.03]"
-              : "bg-black/70 border-white/15 hover:border-rose-500/60 opacity-90"
+              ? "bg-[#162133] border-rose-500 shadow-[0_0_30px_rgba(244,63,94,0.2)] scale-[1.02]"
+              : "bg-[#162133]/70 border-white/10 hover:border-white/30"
           }`}
         >
           <div className="space-y-3">
-            <div className="flex items-center justify-between border-b border-rose-500/30 pb-2">
+            <div className="flex items-center justify-between border-b border-white/10 pb-2">
               <span className="text-[11px] font-mono font-black text-rose-400 uppercase tracking-widest flex items-center gap-1.5">
                 <span className="h-2 w-2 rounded-full bg-rose-500" />
                 CHALLENGE
               </span>
-              <span className="text-[10px] font-mono text-gray-400">02</span>
+              <span className="text-[10px] font-mono text-foreground-secondary">02</span>
             </div>
 
-            <h3 className="text-sm font-display font-extrabold text-white">System Bottlenecks</h3>
+            <h3 className="text-base font-display font-bold text-white">System Bottlenecks</h3>
 
-            <p className="text-xs text-gray-200 leading-relaxed font-sans font-medium drop-shadow">
-              Transport information remains fragmented across separate systems. Planners lack visibility into overall service performance and cannot optimize fleet deployment or reduce operating costs effectively.
+            <p className="text-xs text-foreground-secondary leading-relaxed font-sans font-normal">
+              Transport information remains fragmented across legacy systems. Planners lack visibility into corridor performance and cannot optimize fleet deployment or lower operating costs.
             </p>
           </div>
 
           <div className="pt-3 border-t border-white/10 text-[10px] font-mono text-rose-400 font-bold">
-            High Congestion & Breakdowns
+            Fragmented Data Silos
           </div>
         </div>
 
-        {/* PORTRAIT CARD 3: SOLUTION SUMMARY */}
+        {/* CARD 3: SOLUTION SUMMARY */}
         <div
           onMouseEnter={() => setHoveredCard(2)}
           onMouseLeave={() => setHoveredCard(null)}
-          className={`p-4 rounded-2xl border transition-all duration-500 cursor-pointer flex flex-col justify-between h-full ${
+          className={`p-5 rounded-3xl border transition-all duration-500 cursor-pointer flex flex-col justify-between ${
             currentHighlight === 2
-              ? "bg-black/90 border-emerald-400 shadow-[0_0_30px_rgba(52,211,153,0.6)] scale-[1.03]"
-              : "bg-black/70 border-white/15 hover:border-emerald-400/60 opacity-90"
+              ? "bg-[#162133] border-emerald-400 shadow-[0_0_30px_rgba(46,213,115,0.2)] scale-[1.02]"
+              : "bg-[#162133]/70 border-white/10 hover:border-white/30"
           }`}
         >
           <div className="space-y-3">
-            <div className="flex items-center justify-between border-b border-emerald-400/30 pb-2">
+            <div className="flex items-center justify-between border-b border-white/10 pb-2">
               <span className="text-[11px] font-mono font-black text-emerald-400 uppercase tracking-widest flex items-center gap-1.5">
                 <span className="h-2 w-2 rounded-full bg-emerald-400" />
                 SOLUTION
               </span>
-              <span className="text-[10px] font-mono text-gray-400">03</span>
+              <span className="text-[10px] font-mono text-foreground-secondary">03</span>
             </div>
 
-            <h3 className="text-sm font-display font-extrabold text-white">End-to-End Analytics</h3>
+            <h3 className="text-base font-display font-bold text-white">End-to-End Analytics</h3>
 
-            <p className="text-xs text-gray-200 leading-relaxed font-sans font-medium drop-shadow">
-              Source data is profiled, cleaned, and modeled in Power BI. DAX measures translate raw records into KPIs of revenue, on-time rate, fleet utilization, and maintenance cost — powering decision-making.
+            <p className="text-xs text-foreground-secondary leading-relaxed font-sans font-normal">
+              Source data is cleaned and structured into Power BI star schema. Governed DAX measures translate telemetry into KPIs for farebox recovery, speed drops, and fleet utilization.
             </p>
           </div>
 
           <div className="pt-3 border-t border-white/10 text-[10px] font-mono text-emerald-400 font-bold">
-            Star-Schema & DAX Metrics
+            Star Schema & DAX Metrics
           </div>
         </div>
 
-        {/* PORTRAIT CARD 4: WORKFLOW PIPELINE */}
+        {/* CARD 4: WORKFLOW PIPELINE */}
         <div
           onMouseEnter={() => setHoveredCard(3)}
           onMouseLeave={() => setHoveredCard(null)}
-          className={`p-4 rounded-2xl border transition-all duration-500 cursor-pointer flex flex-col justify-between h-full ${
+          className={`p-5 rounded-3xl border transition-all duration-500 cursor-pointer flex flex-col justify-between ${
             currentHighlight === 3
-              ? "bg-black/90 border-cyan-400 shadow-[0_0_30px_rgba(34,211,238,0.6)] scale-[1.03]"
-              : "bg-black/70 border-white/15 hover:border-cyan-400/60 opacity-90"
+              ? "bg-[#162133] border-cyan-400 shadow-[0_0_30px_rgba(0,212,255,0.2)] scale-[1.02]"
+              : "bg-[#162133]/70 border-white/10 hover:border-white/30"
           }`}
         >
           <div className="space-y-3">
-            <div className="flex items-center justify-between border-b border-cyan-400/30 pb-2">
+            <div className="flex items-center justify-between border-b border-white/10 pb-2">
               <span className="text-[11px] font-mono font-black text-cyan-400 uppercase tracking-widest flex items-center gap-1.5">
                 <span className="h-2 w-2 rounded-full bg-cyan-400" />
                 WORKFLOW
               </span>
-              <span className="text-[10px] font-mono text-gray-400">04</span>
+              <span className="text-[10px] font-mono text-foreground-secondary">04</span>
             </div>
 
-            <h3 className="text-sm font-display font-extrabold text-white">Pipeline Architecture</h3>
+            <h3 className="text-base font-display font-bold text-white">Pipeline Architecture</h3>
 
-            <div className="space-y-1.5 text-[11px] font-sans text-gray-200">
-              <div className="p-1.5 rounded-lg bg-surface/30 border border-white/10">1. Data Ingestion</div>
-              <div className="p-1.5 rounded-lg bg-surface/30 border border-white/10">2. Profile & Clean</div>
-              <div className="p-1.5 rounded-lg bg-surface/30 border border-white/10">3. Power BI & DAX</div>
-              <div className="p-1.5 rounded-lg bg-cyan-500/20 text-cyan-300 font-bold border border-cyan-400/40">4. Decision Control</div>
+            <div className="space-y-1.5 text-[11px] font-sans text-foreground-secondary">
+              <div className="p-1.5 rounded-xl bg-surface/50 border border-white/10">1. Data Ingestion</div>
+              <div className="p-1.5 rounded-xl bg-surface/50 border border-white/10">2. Profile & Clean</div>
+              <div className="p-1.5 rounded-xl bg-surface/50 border border-white/10">3. Power BI & DAX</div>
+              <div className="p-1.5 rounded-xl bg-cyan-500/20 text-cyan-300 font-bold border border-cyan-400/40">4. Policy Decision</div>
             </div>
           </div>
 
           <div className="pt-2 border-t border-white/10 text-[10px] font-mono text-cyan-400 font-bold">
-            4-Stage Data Pipeline
+            Governed 4-Stage Pipeline
           </div>
         </div>
 
-        {/* PORTRAIT CARD 5: CALL TO ACTION */}
+        {/* CARD 5: CALL TO ACTION */}
         <div
           onMouseEnter={() => setHoveredCard(4)}
           onMouseLeave={() => setHoveredCard(null)}
-          className={`p-4 rounded-2xl border transition-all duration-500 cursor-pointer flex flex-col justify-between h-full ${
+          className={`p-5 rounded-3xl border transition-all duration-500 cursor-pointer flex flex-col justify-between ${
             currentHighlight === 4
-              ? "bg-black/95 border-primary shadow-[0_0_30px_rgba(250,204,21,0.7)] scale-[1.03]"
-              : "bg-black/70 border-white/15 hover:border-primary/60 opacity-90"
+              ? "bg-[#162133] border-[#FFFF00] shadow-[0_0_30px_rgba(255,255,0,0.25)] scale-[1.02]"
+              : "bg-[#162133]/70 border-white/10 hover:border-white/30"
           }`}
         >
           <div className="space-y-3">
-            <div className="flex items-center justify-between border-b border-primary/30 pb-2">
-              <span className="text-[11px] font-mono font-black text-primary uppercase tracking-widest flex items-center gap-1.5">
-                <span className="h-2 w-2 rounded-full bg-primary" />
-                CALL TO ACTION
+            <div className="flex items-center justify-between border-b border-white/10 pb-2">
+              <span className="text-[11px] font-mono font-black text-[#FFFF00] uppercase tracking-widest flex items-center gap-1.5">
+                <span className="h-2 w-2 rounded-full bg-[#FFFF00]" />
+                DECISION ACTION
               </span>
-              <span className="text-[10px] font-mono text-gray-400">05</span>
+              <span className="text-[10px] font-mono text-foreground-secondary">05</span>
             </div>
 
-            <h3 className="text-sm font-display font-extrabold text-white">Pilot Rollout Proposal</h3>
+            <h3 className="text-base font-display font-bold text-white">Pilot Rollout Proposal</h3>
 
-            <p className="text-xs text-gray-200 leading-relaxed font-sans font-medium drop-shadow">
-              We invite transport authorities to review the dashboard and support a pilot rollout across high-value Express corridors and Lagos Mainland LGA.
+            <p className="text-xs text-foreground-secondary leading-relaxed font-sans font-normal">
+              We invite transport authorities to evaluate the live Power BI workspace and support a pilot rollout across high-density Express corridors and Lagos Mainland hubs.
             </p>
           </div>
 
           <div className="pt-3 border-t border-white/10 space-y-2">
-            <Button size="sm" asChild className="w-full text-xs font-bold shadow-md">
+            <Button size="sm" asChild className="w-full text-xs font-bold bg-[#FFFF00] text-[#07111F] hover:bg-[#FFFF00]/90 shadow-soft">
               <Link href="/p/powerbi-dashboards">
                 <Icons.powerbi className="mr-1 h-3.5 w-3.5" /> Power BI Portal ↗
               </Link>

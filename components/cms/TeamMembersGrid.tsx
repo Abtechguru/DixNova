@@ -17,29 +17,44 @@ export interface TeamMembersGridProps {
 
 const DEFAULT_MEMBERS: TeamMemberItem[] = [
   {
-    name: "Teddy Yu",
-    role: "Graphic Designer",
-    avatarUrl: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=300"
+    name: "Olasupo Akintunde Olusola",
+    role: "Team Lead - Quality Assurance",
+    avatarUrl: "/dix1.png"
   },
   {
-    name: "Estelle Darcy",
-    role: "Creative Director",
-    avatarUrl: "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&q=80&w=300"
+    name: "Irene, Maureen Ilamosi",
+    role: "Team Lead – Analytics Presentation",
+    avatarUrl: "/dix2.png"
   },
   {
-    name: "Aaron Loeb",
-    role: "Brand Strategist",
-    avatarUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=300"
+    name: "Lateef, Abiodun",
+    role: "Team Lead – Web Development",
+    avatarUrl: "/dix3.png"
   },
   {
-    name: "Olivia Wilson",
-    role: "Web Developer",
-    avatarUrl: "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&q=80&w=300"
+    name: "Amah Grace",
+    role: "Team Lead - Data Analysis",
+    avatarUrl: "/dix4.png"
   },
   {
-    name: "Avery Davis",
-    role: "Digital Marketing",
-    avatarUrl: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=300"
+    name: "David, Melisa Adoro",
+    role: "Documentation & Report Team Lead",
+    avatarUrl: "/dix5.png"
+  },
+  {
+    name: "Uantioje, Promise Amalawa",
+    role: "Team lead - Dashboard Design",
+    avatarUrl: "/dix6.png"
+  },
+  {
+    name: "Wusu, Edward",
+    role: "Team Lead - Business Insights Analysis",
+    avatarUrl: "/dix7.png"
+  },
+  {
+    name: "Ajamu, Gifted Temilade",
+    role: "Team Lead - Power BI Development",
+    avatarUrl: "/dix0.jpeg"
   }
 ]
 
@@ -60,12 +75,10 @@ export function TeamMembersGrid({
       {/* Circular Avatar */}
       <div className="relative h-28 w-28 md:h-32 md:w-32 rounded-full overflow-hidden border-4 border-white/20 shadow-xl group-hover:scale-105 transition-transform duration-300 bg-surface">
         {m.avatarUrl ? (
-          <Image 
+          <img 
             src={m.avatarUrl} 
             alt={m.name}
-            fill
-            className="object-cover"
-            unoptimized
+            className="w-full h-full object-cover"
           />
         ) : (
           <div className="h-full w-full bg-gradient-to-br from-primary/30 to-primary/70 flex items-center justify-center text-xl font-bold text-foreground">

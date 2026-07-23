@@ -3,25 +3,30 @@
 @tailwind utilities;
 
 :root {
-  --background: #f0f7ff;
-  --surface: #ffffff;
-  --foreground: #0f172a;
-  --foreground-secondary: #475569;
-  --primary: #0284c7;
-  --primary-foreground: #ffffff;
-  --secondary: #0057b8;
+  --background: #07111f;
+  --surface: #101828;
+  --card: #162133;
+  --foreground: #ffffff;
+  --foreground-secondary: #c7d2e3;
+  --primary: #ffff00; /* Lagos Bus Yellow */
+  --primary-foreground: #07111f;
+  --secondary: #101828;
   --secondary-foreground: #ffffff;
-  --accent: #10b981;
+  --accent: #00d4ff; /* Accent Cyan */
+  --success: #2ed573;
+  --warning: #ffc107;
+  --danger: #ff5b5b;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #e0f2fe;
-    --surface: #ffffff;
-    --foreground: #0f172a;
-    --foreground-secondary: #475569;
-    --primary: #0284c7;
-    --primary-foreground: #ffffff;
+    --background: #07111f;
+    --surface: #101828;
+    --card: #162133;
+    --foreground: #ffffff;
+    --foreground-secondary: #c7d2e3;
+    --primary: #ffff00;
+    --primary-foreground: #07111f;
   }
 }
 
@@ -31,6 +36,7 @@ body {
   overflow-x: hidden;
   color: var(--foreground);
   background: var(--background);
+  font-family: var(--font-inter), sans-serif;
 }
 
 * {
@@ -46,17 +52,62 @@ body {
   scrollbar-width: none;
 }
 
-/* Glassmorphism utilities */
-.glass {
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(2, 132, 199, 0.2);
+/* Glassmorphism & Keynote Card Utilities */
+.glass-keynote {
+  background: rgba(22, 33, 51, 0.88);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 1.5rem; /* 24px */
 }
 
-.glass-dark {
-  background: rgba(240, 247, 255, 0.85);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(2, 132, 199, 0.2);
+.glass-keynote-active {
+  background: rgba(22, 33, 51, 0.95);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 0, 0.35);
+  box-shadow: 0 0 35px rgba(255, 255, 0, 0.15);
+  border-radius: 1.5rem;
+}
+
+/* Motion & Animation Keyframes */
+@keyframes trafficDash {
+  to {
+    stroke-dashoffset: -40;
+  }
+}
+
+.animate-traffic {
+  stroke-dasharray: 8 12;
+  animation: trafficDash 3s linear infinite;
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    opacity: 0.4;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.85;
+    transform: scale(1.04);
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulseGlow 4s ease-in-out infinite;
+}
+
+@keyframes slideUpFade {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-up {
+  animation: slideUpFade 0.5s ease-out forwards;
 }

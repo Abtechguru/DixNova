@@ -139,23 +139,23 @@ export function PowerBiZipVisualizer({ reportData }: { reportData?: ZipReportDat
   }
 
   return (
-    <div className="w-full rounded-3xl border border-surface bg-card p-4 sm:p-6 shadow-2xl space-y-6">
+    <div className="w-full rounded-3xl border border-white/10 bg-[#162133]/90 backdrop-blur-xl p-6 sm:p-8 shadow-2xl space-y-6">
       {/* HEADER BAR */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-surface pb-5">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-white/10 pb-5">
         <div className="flex items-start gap-3">
-          <div className="p-3 rounded-2xl bg-primary/10 border border-primary/20 text-primary shrink-0">
+          <div className="p-3 rounded-2xl bg-[#FFFF00]/10 border border-[#FFFF00]/30 text-[#FFFF00] shrink-0 shadow-sm">
             <Icons.powerbi className="h-6 w-6" />
           </div>
           <div>
             <div className="flex flex-wrap items-center gap-2">
-              <h2 className="text-xl font-display font-extrabold text-foreground">
+              <h2 className="text-xl font-display font-extrabold text-white">
                 {reportData?.name || "Power BI Extracted Analytics Dashboard"}
               </h2>
-              <Badge variant="default" className="text-[10px] font-mono bg-emerald-500/10 text-emerald-600 border-emerald-500/30">
+              <Badge variant="default" className="text-[10px] font-mono bg-[#FFFF00] text-[#07111F] font-bold">
                 📦 EXTRACTED ZIP PACKAGE
               </Badge>
               {reportData?.fileCount !== undefined && (
-                <Badge variant="outline" className="text-[10px] font-mono">
+                <Badge variant="outline" className="text-[10px] font-mono text-cyan-300 border-cyan-500/30">
                   {reportData.fileCount} Files ({formatBytes(reportData.fileSizeBytes)})
                 </Badge>
               )}
@@ -169,14 +169,14 @@ export function PowerBiZipVisualizer({ reportData }: { reportData?: ZipReportDat
         {/* Action Controls & Tab Switcher */}
         <div className="flex items-center gap-2 flex-wrap self-start lg:self-auto">
           {reportData?.zipUrl && (
-            <Button variant="outline" size="sm" asChild className="text-xs">
+            <Button variant="outline" size="sm" asChild className="text-xs border-surface text-white hover:bg-white/10">
               <a href={reportData.zipUrl} download>
                 📥 Download ZIP
               </a>
             </Button>
           )}
 
-          <div className="flex items-center rounded-xl bg-surface/50 p-1 border border-surface">
+          <div className="flex items-center rounded-xl bg-[#07111F] p-1 border border-white/10">
             <button
               onClick={() => setActiveTab("visuals")}
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${

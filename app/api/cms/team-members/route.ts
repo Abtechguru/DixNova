@@ -3,34 +3,52 @@ import { prisma } from "@/lib/db/prisma"
 
 const SEED_MEMBERS = [
   {
-    name: "Teddy Yu",
-    role: "Graphic Designer",
-    avatarUrl: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=300",
+    name: "Olasupo Akintunde Olusola",
+    role: "Team Lead - Quality Assurance",
+    avatarUrl: "/dix1.png",
     order: 1
   },
   {
-    name: "Estelle Darcy",
-    role: "Creative Director",
-    avatarUrl: "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&q=80&w=300",
+    name: "Irene, Maureen Ilamosi",
+    role: "Team Lead – Analytics Presentation",
+    avatarUrl: "/dix2.png",
     order: 2
   },
   {
-    name: "Aaron Loeb",
-    role: "Brand Strategist",
-    avatarUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=300",
+    name: "Lateef, Abiodun",
+    role: "Team Lead – Web Development",
+    avatarUrl: "/dix3.png",
     order: 3
   },
   {
-    name: "Olivia Wilson",
-    role: "Web Developer",
-    avatarUrl: "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&q=80&w=300",
+    name: "Amah Grace",
+    role: "Team Lead - Data Analysis",
+    avatarUrl: "/dix4.png",
     order: 4
   },
   {
-    name: "Avery Davis",
-    role: "Digital Marketing",
-    avatarUrl: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=300",
+    name: "David, Melisa Adoro",
+    role: "Documentation & Report Team Lead",
+    avatarUrl: "/dix5.png",
     order: 5
+  },
+  {
+    name: "Uantioje, Promise Amalawa",
+    role: "Team lead - Dashboard Design",
+    avatarUrl: "/dix6.png",
+    order: 6
+  },
+  {
+    name: "Wusu, Edward",
+    role: "Team Lead - Business Insights Analysis",
+    avatarUrl: "/dix7.png",
+    order: 7
+  },
+  {
+    name: "Ajamu, Gifted Temilade",
+    role: "Team Lead - Power BI Development",
+    avatarUrl: "/dix0.jpeg",
+    order: 8
   }
 ]
 
@@ -46,8 +64,12 @@ export async function GET() {
       orderBy: { order: "asc" }
     })
 
-    if (!members || members.length === 0) {
+    // If database contains old placeholder members (like "Teddy Yu" or "Estelle Darcy"), purge and seed official team members
+    const hasOldMembers = members.some((m: any) => m.name === "Teddy Yu" || m.name === "Estelle Darcy" || m.name === "Aaron Loeb")
+
+    if (!members || members.length === 0 || hasOldMembers) {
       try {
+        await db.teamMember.deleteMany({})
         for (const m of SEED_MEMBERS) {
           await db.teamMember.create({ data: m })
         }

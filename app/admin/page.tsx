@@ -1037,17 +1037,24 @@ export default function AdminPage() {
                     </div>
 
                     <div className="space-y-1 md:col-span-2">
-                      <label className="text-[11px] font-mono text-foreground-secondary">Avatar Photo URL</label>
-                      <div className="flex gap-2">
+                      <label className="text-[11px] font-mono text-foreground-secondary">Avatar Photo URL / File Upload</label>
+                      <div className="flex gap-2 items-center">
+                        {editingMember.avatarUrl && (
+                          <img
+                            src={editingMember.avatarUrl}
+                            alt="Avatar Preview"
+                            className="h-10 w-10 rounded-full object-cover border-2 border-primary/50 shrink-0"
+                          />
+                        )}
                         <input
                           type="text"
                           value={editingMember.avatarUrl || ""}
                           onChange={(e) => setEditingMember({ ...editingMember, avatarUrl: e.target.value })}
-                          placeholder="https://images.unsplash.com/... or /uploads/..."
+                          placeholder="https://... or /uploads/..."
                           className="flex-1 px-3 py-2 rounded-xl border border-surface bg-card text-xs font-mono text-foreground focus:outline-none focus:border-primary"
                         />
-                        <label className="cursor-pointer px-3 py-2 bg-surface hover:bg-surface/80 rounded-xl text-xs font-semibold border border-surface flex items-center gap-1">
-                          <span>Upload Photo</span>
+                        <label className="cursor-pointer px-3 py-2 bg-primary text-primary-foreground hover:bg-primary/90 rounded-xl text-xs font-bold border border-primary flex items-center gap-1 shrink-0 shadow-sm">
+                          <span>📷 Upload Photo</span>
                           <input
                             type="file"
                             accept="image/*"

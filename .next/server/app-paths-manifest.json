@@ -1,6 +1,6 @@
 {
-  "/page": "app/page.js",
+  "/p/executive-summary/page": "app/p/executive-summary/page.js",
   "/presentation/page": "app/presentation/page.js",
   "/p/powerbi-dashboards/page": "app/p/powerbi-dashboards/page.js",
-  "/p/executive-summary/page": "app/p/executive-summary/page.js"
+  "/page": "app/page.js"
 }

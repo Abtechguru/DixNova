@@ -13,12 +13,12 @@ export async function GET() {
     try {
       if (db.powerBiReport) {
         pbiReports = await db.powerBiReport.findMany({
-          orderBy: { createdAt: "desc" }
+          orderBy: { displayOrder: "asc" }
         })
       }
       if (db.dataset) {
         datasetsDb = await db.dataset.findMany({
-          orderBy: { createdAt: "desc" }
+          orderBy: { updatedAt: "desc" }
         })
       }
       if (db.mediaAsset) {

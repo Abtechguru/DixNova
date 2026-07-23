@@ -5,7 +5,8 @@ import dynamic from "next/dynamic"
 import Link from "next/link"
 import { Button } from "@/components/ui/Button"
 import { Badge } from "@/components/ui/Badge"
-import { Icons } from "@/lib/utils/icons"
+import { LagosTransitBackdrop } from "@/components/layout/LagosTransitBackdrop"
+import { FloatingPresentationController } from "@/components/layout/FloatingPresentationController"
 
 import type { TeamMemberItem, TeamMembersGridProps } from "@/components/cms/TeamMembersGrid"
 
@@ -342,27 +343,19 @@ export default function PresentationPage() {
   const slide = slides[currentSlide]
 
   return (
-    <div className="h-screen max-h-screen w-full max-w-full overflow-hidden bg-background text-foreground flex flex-col justify-between p-2 sm:p-4 space-y-2">
-      {/* Top Header Controls */}
-      <div className="flex items-center justify-between border-b border-surface pb-2 flex-none">
-        <div className="flex items-center gap-2 sm:gap-3">
-          <Badge variant="default" className="text-[10px] sm:text-xs">{slide.stage}</Badge>
-          <span className="text-[10px] sm:text-xs font-mono text-foreground-secondary">SLIDE {currentSlide + 1} / {slides.length}</span>
-        </div>
-        <Button variant="ghost" size="sm" asChild className="text-xs">
-          <Link href="/">✕ Exit Presentation</Link>
-        </Button>
-      </div>
+    <div className="h-screen max-h-screen w-full max-w-full overflow-hidden bg-[#07111F] text-foreground flex flex-col justify-between p-2 sm:p-4 space-y-2 relative selection:bg-[#FFFF00] selection:text-[#07111F]">
+      {/* Lagos Urban Mobility Vector Backdrop */}
+      <LagosTransitBackdrop />
 
-      {/* Main Slide Card (Full-Height Viewport Container with Heading Banner) */}
-      <div className="flex-1 flex flex-col justify-center items-center overflow-y-auto py-1 w-full max-w-7xl mx-auto scrollbar-none">
+      {/* Main Slide Content Card */}
+      <div className="flex-1 flex flex-col justify-center items-center overflow-y-auto py-1 pb-16 w-full max-w-7xl mx-auto scrollbar-none relative z-10">
         {currentSlide !== 0 && (
-          <div className="text-center py-1.5 px-4 bg-card/60 border border-surface rounded-xl flex-none mb-2 w-full max-w-4xl space-y-0.5 shadow-sm">
-            <h1 className="text-base sm:text-lg md:text-xl font-display font-extrabold text-foreground tracking-tight">
+          <div className="text-center py-2.5 px-6 bg-[#162133]/90 backdrop-blur-xl border border-white/10 rounded-3xl flex-none mb-3 w-full max-w-4xl space-y-0.5 shadow-2xl">
+            <h1 className="text-base sm:text-xl md:text-2xl font-display font-extrabold text-white tracking-tight">
               {slide.title}
             </h1>
             {slide.subtitle && (
-              <p className="text-[11px] font-mono text-foreground-secondary truncate">{slide.subtitle}</p>
+              <p className="text-xs font-mono text-foreground-secondary truncate">{slide.subtitle}</p>
             )}
           </div>
         )}
@@ -372,40 +365,16 @@ export default function PresentationPage() {
         </div>
       </div>
 
-      {/* Bottom Navigation Footer with Arrow Controls */}
-      <div className="flex items-center justify-between border-t border-surface pt-3 max-w-3xl mx-auto w-full flex-none gap-2">
-        <Button
-          variant="outline"
-          size="sm"
-          disabled={currentSlide === 0}
-          onClick={() => setCurrentSlide(prev => Math.max(0, prev - 1))}
-          className="text-xs px-2 sm:px-3"
-        >
-          <Icons.chevronRight className="mr-1 sm:mr-2 h-3.5 w-3.5 rotate-180" /> Previous
-        </Button>
-
-        <div className="hidden sm:flex gap-1 items-center overflow-x-auto max-w-[200px] md:max-w-none scrollbar-none px-2">
-          {slides.map((_, i) => (
-            <div
-              key={i}
-              onClick={() => setCurrentSlide(i)}
-              className={`h-1.5 rounded-full cursor-pointer transition-all ${
-                i === currentSlide ? "w-5 bg-primary" : "w-1.5 bg-surface hover:bg-foreground-secondary"
-              }`}
-            />
-          ))}
-        </div>
-
-        <Button
-          variant="default"
-          size="sm"
-          disabled={currentSlide === slides.length - 1}
-          onClick={() => setCurrentSlide(prev => Math.min(slides.length - 1, prev + 1))}
-          className="text-xs px-2 sm:px-3"
-        >
-          Next <Icons.chevronRight className="ml-1 sm:ml-2 h-3.5 w-3.5" />
-        </Button>
-      </div>
+      {/* Floating Executive Presentation Navigation Controller */}
+      <FloatingPresentationController
+        currentSlide={currentSlide}
+        totalSlides={slides.length}
+        stageTitle={slide.title}
+        stageNumber={slide.stage}
+        onPrev={() => setCurrentSlide(prev => Math.max(0, prev - 1))}
+        onNext={() => setCurrentSlide(prev => Math.min(slides.length - 1, prev + 1))}
+        onSelectSlide={(idx) => setCurrentSlide(idx)}
+      />
     </div>
   )
 }

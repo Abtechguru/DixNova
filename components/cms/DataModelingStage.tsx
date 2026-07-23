@@ -4,218 +4,291 @@ import * as React from "react"
 import { Badge } from "@/components/ui/Badge"
 import { Icons } from "@/lib/utils/icons"
 
-interface FunnelTier {
-  num: string
-  title: string
-  subtitle: string
+interface StarTable {
+  id: string
+  name: string
+  type: "FACT" | "DIMENSION"
+  pk: string
+  fk?: string[]
+  attributes: string[]
   color: string
-  bgColor: string
   borderColor: string
+  bgColor: string
   textColor: string
-  glowColor: string
-  leftSpokes: string[]
-  rightSpokes: string[]
 }
 
 export function DataModelingStage() {
-  const [activeTier, setActiveTier] = React.useState<number>(0)
-  const [hoveredTier, setHoveredTier] = React.useState<number | null>(null)
-  const [isAutoCycling, setIsAutoCycling] = React.useState<boolean>(true)
+  const [selectedTable, setSelectedTable] = React.useState<string>("Fact_Telemetry")
+  const [activePipelineStep, setActivePipelineStep] = React.useState<number>(0)
 
-  const tiers: FunnelTier[] = [
+  const starTables: StarTable[] = [
     {
-      num: "01",
-      title: "Data Model Core",
-      subtitle: "Star-Schema Relational Foundation",
-      color: "#1e40af", // Dark Blue Base
-      bgColor: "bg-blue-950/70",
-      borderColor: "border-blue-600",
-      textColor: "text-blue-400",
-      glowColor: "shadow-[0_0_30px_rgba(30,64,175,0.7)]",
-      leftSpokes: ["Fact_Trips & Telemetry", "Fact_Revenue & Fares"],
-      rightSpokes: ["Dim_Corridor Geometries", "Dim_Vehicle Fleet Registers"]
+      id: "Fact_Telemetry",
+      name: "Fact_Telemetry",
+      type: "FACT",
+      pk: "telemetry_id",
+      fk: ["vehicle_id", "corridor_id", "date_key"],
+      attributes: ["speed_kmh", "passenger_count", "congestion_score", "delay_min"],
+      color: "#FFFF00",
+      borderColor: "border-[#FFFF00]",
+      bgColor: "bg-[#FFFF00]/10",
+      textColor: "text-[#FFFF00]"
     },
     {
-      num: "02",
-      title: "Systems & Data Layer",
-      subtitle: "Unified Integration & Minimum Redundancy",
-      color: "#0284c7", // Medium Sky Blue
-      bgColor: "bg-sky-950/70",
-      borderColor: "border-sky-500",
-      textColor: "text-sky-400",
-      glowColor: "shadow-[0_0_30px_rgba(2,132,199,0.7)]",
-      leftSpokes: ["Systems Integration (Power BI + Next.js)", "Simple REST Interfaces & API Hooks"],
-      rightSpokes: ["Minimum Redundancy of Data", "100% Compatible Star-Schema (11.5K Records)"]
+      id: "Fact_Revenue",
+      name: "Fact_Revenue",
+      type: "FACT",
+      pk: "transaction_id",
+      fk: ["corridor_id", "fare_type_id", "date_key"],
+      attributes: ["amount_ngn", "tap_in_time", "tap_out_time", "recovery_pct"],
+      color: "#2ED573",
+      borderColor: "border-[#2ED573]",
+      bgColor: "bg-[#2ED573]/10",
+      textColor: "text-[#2ED573]"
     },
     {
-      num: "03",
-      title: "Transportation Intelligence",
-      subtitle: "DixNova Business Value Outcomes",
-      color: "#3b82f6", // Electric Primary Blue
-      bgColor: "bg-indigo-950/70",
-      borderColor: "border-indigo-400",
-      textColor: "text-indigo-300",
-      glowColor: "shadow-[0_0_35px_rgba(59,130,246,0.8)]",
-      leftSpokes: ["New Business Opportunities", "Increased Operational Effectiveness", "Responsive to Congestion Spikes"],
-      rightSpokes: ["Reduced Operating Risk", "Reduced Maintenance Costs & Fare Leakage"]
+      id: "Dim_Corridor",
+      name: "Dim_Corridor",
+      type: "DIMENSION",
+      pk: "corridor_id",
+      attributes: ["corridor_name", "origin_hub", "dest_hub", "length_km", "speed_limit"],
+      color: "#00D4FF",
+      borderColor: "border-[#00D4FF]",
+      bgColor: "bg-[#00D4FF]/10",
+      textColor: "text-[#00D4FF]"
+    },
+    {
+      id: "Dim_Vehicle",
+      name: "Dim_Vehicle",
+      type: "DIMENSION",
+      pk: "vehicle_id",
+      attributes: ["plate_number", "bus_type", "seating_capacity", "depot_location"],
+      color: "#00D4FF",
+      borderColor: "border-[#00D4FF]",
+      bgColor: "bg-[#00D4FF]/10",
+      textColor: "text-[#00D4FF]"
+    },
+    {
+      id: "Dim_Payment",
+      name: "Dim_Payment",
+      type: "DIMENSION",
+      pk: "fare_type_id",
+      attributes: ["payment_method", "card_issuer", "discount_pct", "channel"],
+      color: "#00D4FF",
+      borderColor: "border-[#00D4FF]",
+      bgColor: "bg-[#00D4FF]/10",
+      textColor: "text-[#00D4FF]"
     }
   ]
 
-  // Auto-cycle through the 3 funnel tiers
+  const pipelineSteps = [
+    { title: "Raw Ingestion", subtitle: "GPS & Tap-In Feeds" },
+    { title: "Fact & Dim Star Schema", subtitle: "Dimensional Data Model" },
+    { title: "Power BI Engine", subtitle: "Tabular In-Memory Model" },
+    { title: "Governed DAX Measures", subtitle: "Calculated Transport KPIs" },
+    { title: "Executive Decision Insights", subtitle: "LAMATA Policy Actions" }
+  ]
+
+  // Pipeline Step Auto Cycle
   React.useEffect(() => {
-    if (!isAutoCycling || hoveredTier !== null) return
-
     const timer = setInterval(() => {
-      setActiveTier((prev) => (prev + 1) % 3)
-    }, 3500)
-
+      setActivePipelineStep(prev => (prev + 1) % pipelineSteps.length)
+    }, 2800)
     return () => clearInterval(timer)
-  }, [isAutoCycling, hoveredTier])
+  }, [pipelineSteps.length])
 
-  const currentHighlight = hoveredTier !== null ? hoveredTier : activeTier
-  const activeData = tiers[currentHighlight]
+  const currentTable = starTables.find(t => t.id === selectedTable) || starTables[0]
 
   return (
     <div className="w-full max-w-6xl mx-auto space-y-4 my-2">
       
-      {/* HEADER CONTROL BANNER */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 p-4 rounded-2xl border border-surface bg-card shadow-soft">
-        <div>
-          <div className="flex items-center gap-2">
-            <Badge variant="default" className="text-[10px] font-mono font-bold bg-primary text-primary-foreground">
-              STAR-SCHEMA DIMENSIONAL ARCHITECTURE
-            </Badge>
-            <span className="text-xs text-foreground-secondary font-mono">
-              Stage 10 • Data Modeling Funnel
-            </span>
-          </div>
-          <h2 className="text-base sm:text-xl font-display font-extrabold text-foreground tracking-tight pt-1">
-            Data Modeling Funnel & Business Value Outcomes
-          </h2>
-        </div>
-
-        <button
-          onClick={() => setIsAutoCycling(!isAutoCycling)}
-          className="text-xs font-mono px-3 py-1 rounded-full bg-surface hover:bg-surface/80 border border-surface text-foreground-secondary transition-all flex items-center gap-1.5 self-end sm:self-auto"
-        >
-          <span className="h-2 w-2 rounded-full bg-primary animate-ping" />
-          <span>{isAutoCycling ? "⏸ Auto-Cycle Active" : "▶ Resume Auto-Cycle"}</span>
-        </button>
-      </div>
-
-      {/* 3-TIER FUNNEL PYRAMID WITH RADIATING VALUE SPOKES (MATCHING TEMPLATE IMAGE) */}
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center p-4 sm:p-6 rounded-3xl border border-white/20 bg-black/75 backdrop-blur-md shadow-2xl relative overflow-hidden">
+      {/* 3-COLUMN ENTERPRISE LAYOUT */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-stretch">
         
-        {/* Background Image Backdrop */}
-        <img
-          src="/dix0.jpeg"
-          alt="Data Modeling Backdrop"
-          className="absolute inset-0 w-full h-full object-cover filter brightness-[0.2] scale-105 transform-gpu -z-10 transition-all duration-700"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/75 to-black/40 -z-10" />
-
-        {/* LEFT RADIATING SPOKES */}
-        <div className="md:col-span-3 space-y-3 z-10">
-          <span className="text-[10px] font-mono font-black text-cyan-400 uppercase tracking-widest block text-left">
-            ⬅ LEFT VALUE SPOKES
-          </span>
-
-          {activeData.leftSpokes.map((spoke, idx) => (
-            <div
-              key={idx}
-              className={`p-3 rounded-2xl border transition-all duration-500 bg-black/80 border-cyan-500/40 text-left shadow-lg ${activeData.glowColor}`}
-            >
-              <span className="text-xs font-sans font-bold text-white flex items-center gap-2">
-                <span className="text-cyan-400">↖</span> {spoke}
-              </span>
+        {/* LEFT COLUMN: INTERACTIVE STAR SCHEMA DIAGRAM */}
+        <div className="lg:col-span-5 p-5 rounded-2xl bg-[#162133]/90 border border-surface shadow-xl space-y-4 flex flex-col justify-between">
+          <div>
+            <div className="flex items-center justify-between border-b border-surface/60 pb-3">
+              <div className="flex items-center gap-2">
+                <Badge variant="default" className="text-[10px] font-mono bg-[#FFFF00] text-[#07111F] font-black">
+                  STAR SCHEMA MODEL
+                </Badge>
+                <span className="text-xs text-foreground-secondary font-mono">5 Model Entities</span>
+              </div>
+              <span className="text-[10px] font-mono text-cyan-400">Click Entity to Inspect</span>
             </div>
-          ))}
-        </div>
 
-        {/* CENTER 3-TIER UPWARD FUNNEL CONE (MATCHING TEMPLATE LAYOUT) */}
-        <div className="md:col-span-6 flex flex-col items-center justify-center p-2 z-10 space-y-3">
-          
-          {/* TIER 3 (TOP - TRANSPORTATION INTELLIGENCE) */}
-          <div
-            onMouseEnter={() => setHoveredTier(2)}
-            onMouseLeave={() => setHoveredTier(null)}
-            className={`w-full p-4 rounded-full border-4 transition-all duration-500 cursor-pointer text-center ${
-              currentHighlight === 2
-                ? `${tiers[2].bgColor} ${tiers[2].borderColor} ${tiers[2].glowColor} scale-[1.04]`
-                : "bg-indigo-950/40 border-white/20 opacity-80 hover:opacity-100"
-            }`}
-          >
-            <span className="text-[10px] font-mono font-black text-indigo-300 uppercase tracking-widest block">
-              TOP TIER 03 • BUSINESS VALUE
-            </span>
-            <h3 className="text-sm sm:text-base font-display font-black text-white">
-              Transportation Intelligence (Your Business)
-            </h3>
+            {/* Interactive Schema Node Selector Grid */}
+            <div className="grid grid-cols-1 gap-2.5 pt-3">
+              {starTables.map((t) => {
+                const isSelected = selectedTable === t.id
+                return (
+                  <div
+                    key={t.id}
+                    onClick={() => setSelectedTable(t.id)}
+                    className={`p-3 rounded-xl border transition-all cursor-pointer flex items-center justify-between ${
+                      isSelected
+                        ? `${t.bgColor} ${t.borderColor} shadow-[0_0_15px_rgba(255,255,0,0.25)] scale-[1.01]`
+                        : "bg-surface/30 border-surface/40 hover:border-surface hover:bg-surface/50"
+                    }`}
+                  >
+                    <div className="flex items-center gap-2.5">
+                      <span className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded ${t.type === "FACT" ? "bg-[#FFFF00] text-[#07111F]" : "bg-cyan-500/20 text-cyan-400 border border-cyan-500/30"}`}>
+                        {t.type}
+                      </span>
+                      <h4 className="text-xs font-bold font-display text-white">{t.name}</h4>
+                    </div>
+                    <span className="text-[10px] font-mono text-foreground-secondary">
+                      PK: {t.pk}
+                    </span>
+                  </div>
+                )
+              })}
+            </div>
           </div>
 
-          {/* Upward Arrow Connector 2 */}
-          <div className="text-sky-400 animate-bounce text-sm font-bold">▲</div>
-
-          {/* TIER 2 (MIDDLE - SYSTEMS & DATA LAYER) */}
-          <div
-            onMouseEnter={() => setHoveredTier(1)}
-            onMouseLeave={() => setHoveredTier(null)}
-            className={`w-[82%] p-3.5 rounded-full border-4 transition-all duration-500 cursor-pointer text-center ${
-              currentHighlight === 1
-                ? `${tiers[1].bgColor} ${tiers[1].borderColor} ${tiers[1].glowColor} scale-[1.04]`
-                : "bg-sky-950/40 border-white/20 opacity-80 hover:opacity-100"
-            }`}
-          >
-            <span className="text-[10px] font-mono font-black text-sky-400 uppercase tracking-widest block">
-              MIDDLE TIER 02 • INTEGRATION
-            </span>
-            <h3 className="text-xs sm:text-sm font-display font-extrabold text-white">
-              Systems & Data Layer
-            </h3>
-          </div>
-
-          {/* Upward Arrow Connector 1 */}
-          <div className="text-blue-400 animate-bounce text-sm font-bold">▲</div>
-
-          {/* TIER 1 (BASE - DATA MODEL CORE) */}
-          <div
-            onMouseEnter={() => setHoveredTier(0)}
-            onMouseLeave={() => setHoveredTier(null)}
-            className={`w-[65%] p-3 rounded-full border-4 transition-all duration-500 cursor-pointer text-center ${
-              currentHighlight === 0
-                ? `${tiers[0].bgColor} ${tiers[0].borderColor} ${tiers[0].glowColor} scale-[1.04]`
-                : "bg-blue-950/40 border-white/20 opacity-80 hover:opacity-100"
-            }`}
-          >
-            <span className="text-[9px] font-mono font-black text-blue-400 uppercase tracking-widest block">
-              BASE TIER 01 • STAR-SCHEMA CORE
-            </span>
-            <h3 className="text-xs font-display font-extrabold text-white">
-              Data Model (Star-Schema)
-            </h3>
+          {/* Active Entity Schema Inspector Card */}
+          <div className="p-3.5 rounded-xl bg-black/60 border border-surface/60 space-y-2">
+            <div className="flex items-center justify-between border-b border-white/10 pb-1.5">
+              <span className={`text-xs font-mono font-bold ${currentTable.textColor}`}>
+                Inspect Attributes: {currentTable.name}
+              </span>
+              <span className="text-[10px] font-mono text-gray-400">MongoDB / Tabular</span>
+            </div>
+            <div className="flex flex-wrap gap-1.5 pt-1">
+              <span className="text-[10px] font-mono bg-[#FFFF00]/20 text-[#FFFF00] px-2 py-0.5 rounded border border-[#FFFF00]/30 font-bold">
+                🔑 {currentTable.pk} (PK)
+              </span>
+              {currentTable.fk?.map((fk, idx) => (
+                <span key={idx} className="text-[10px] font-mono bg-cyan-500/20 text-cyan-300 px-2 py-0.5 rounded border border-cyan-500/30">
+                  🔗 {fk} (FK)
+                </span>
+              ))}
+              {currentTable.attributes.map((attr, idx) => (
+                <span key={idx} className="text-[10px] font-mono bg-white/10 text-gray-200 px-2 py-0.5 rounded">
+                  {attr}
+                </span>
+              ))}
+            </div>
           </div>
 
         </div>
 
-        {/* RIGHT RADIATING SPOKES */}
-        <div className="md:col-span-3 space-y-3 z-10">
-          <span className="text-[10px] font-mono font-black text-emerald-400 uppercase tracking-widest block text-right">
-            RIGHT VALUE SPOKES ➔
-          </span>
-
-          {activeData.rightSpokes.map((spoke, idx) => (
-            <div
-              key={idx}
-              className={`p-3 rounded-2xl border transition-all duration-500 bg-black/80 border-emerald-500/40 text-right shadow-lg ${activeData.glowColor}`}
-            >
-              <span className="text-xs font-sans font-bold text-white flex items-center justify-end gap-2">
-                {spoke} <span className="text-emerald-400">↗</span>
-              </span>
+        {/* CENTER COLUMN: RELATIONSHIP FLOW ANIMATION */}
+        <div className="lg:col-span-4 p-5 rounded-2xl bg-[#162133]/90 border border-surface shadow-xl space-y-4 flex flex-col justify-between">
+          <div>
+            <div className="flex items-center justify-between border-b border-surface/60 pb-3">
+              <h3 className="text-xs font-bold font-display text-white flex items-center gap-2">
+                <Icons.projects className="h-4 w-4 text-[#FFFF00]" />
+                <span>Relationship Data Flow Pipeline</span>
+              </h3>
+              <Badge variant="outline" className="text-[9px] font-mono text-[#FFFF00] border-[#FFFF00]/40">
+                1-to-Many Relationships
+              </Badge>
             </div>
-          ))}
+
+            {/* Pipeline Stage Steps */}
+            <div className="space-y-2 pt-3">
+              {pipelineSteps.map((step, idx) => {
+                const isActive = activePipelineStep === idx
+                return (
+                  <div
+                    key={idx}
+                    className={`p-3 rounded-xl border transition-all flex items-center justify-between ${
+                      isActive
+                        ? "bg-[#FFFF00]/10 border-[#FFFF00] shadow-[0_0_20px_rgba(255,255,0,0.2)]"
+                        : "bg-surface/20 border-surface/40 opacity-75"
+                    }`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className={`h-6 w-6 rounded-full flex items-center justify-center font-mono text-xs font-bold ${isActive ? "bg-[#FFFF00] text-[#07111F]" : "bg-surface text-gray-400"}`}>
+                        {idx + 1}
+                      </div>
+                      <div>
+                        <h4 className="text-xs font-bold text-white">{step.title}</h4>
+                        <p className="text-[10px] text-foreground-secondary font-mono">{step.subtitle}</p>
+                      </div>
+                    </div>
+
+                    {isActive && (
+                      <span className="h-2 w-2 rounded-full bg-[#FFFF00] animate-ping" />
+                    )}
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+
+          <div className="p-3 rounded-xl bg-surface/30 border border-surface/50 text-center">
+            <span className="text-[11px] font-mono text-foreground-secondary block">
+              Star Schema Relationship Integrity: <strong className="text-emerald-400">100% Enforced</strong>
+            </span>
+          </div>
+        </div>
+
+        {/* RIGHT COLUMN: EXECUTIVE BUSINESS BENEFITS */}
+        <div className="lg:col-span-3 p-5 rounded-2xl bg-[#162133]/90 border border-surface shadow-xl space-y-4 flex flex-col justify-between">
+          <div>
+            <div className="border-b border-surface/60 pb-3">
+              <h3 className="text-xs font-bold font-display text-white flex items-center gap-2">
+                <Icons.objectives className="h-4 w-4 text-cyan-400" />
+                <span>Business Value Benefits</span>
+              </h3>
+              <p className="text-[11px] text-foreground-secondary">Why Star Schema Data Modeling Matters</p>
+            </div>
+
+            <div className="space-y-3 pt-3">
+              <div className="p-3 rounded-xl bg-surface/30 border border-surface/50 space-y-1">
+                <h4 className="text-xs font-bold text-[#FFFF00]">Unified Single Source of Truth</h4>
+                <p className="text-[11px] text-foreground-secondary leading-snug">
+                  Connects fragmented Cowry fare transactions, GPS telemetry, and maintenance records into one canonical data model.
+                </p>
+              </div>
+
+              <div className="p-3 rounded-xl bg-surface/30 border border-surface/50 space-y-1">
+                <h4 className="text-xs font-bold text-cyan-400">Sub-Second DAX Querying</h4>
+                <p className="text-[11px] text-foreground-secondary leading-snug">
+                  Star schema indexing delivers instantaneous filter slicing across Lagos corridors, vehicle types, and payment channels.
+                </p>
+              </div>
+
+              <div className="p-3 rounded-xl bg-surface/30 border border-surface/50 space-y-1">
+                <h4 className="text-xs font-bold text-emerald-400">Governed DAX Measures</h4>
+                <p className="text-[11px] text-foreground-secondary leading-snug">
+                  Eliminates formula drift by standardizing farebox recovery, speed drops, and congestion index DAX measures.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <Badge variant="outline" className="text-[10px] font-mono text-center justify-center py-1.5 border-cyan-400/40 text-cyan-300">
+            ⚡ ENTERPRISE DATA ARCHITECTURE
+          </Badge>
         </div>
 
       </div>
+
+      {/* BOTTOM EXECUTIVE TAKEAWAY BANNER */}
+      <div className="p-4 rounded-2xl bg-gradient-to-r from-[#162133] via-surface to-[#162133] border border-[#FFFF00]/30 shadow-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+        <div className="flex items-center gap-3">
+          <div className="h-10 w-10 rounded-xl bg-[#FFFF00]/10 border border-[#FFFF00]/30 flex items-center justify-center text-[#FFFF00] shrink-0">
+            <Icons.sparkles className="h-5 w-5 animate-pulse" />
+          </div>
+          <div>
+            <h4 className="text-xs font-bold font-display text-white">
+              Executive Architectural Takeaway
+            </h4>
+            <p className="text-xs text-foreground-secondary">
+              The star-schema dimensional model bridges raw operational data feeds with executive decision-making, guaranteeing reliable Power BI calculations for LAMATA transport policy.
+            </p>
+          </div>
+        </div>
+
+        <Badge variant="default" className="text-[10px] font-mono bg-[#FFFF00] text-[#07111F] font-bold shrink-0 self-end sm:self-auto">
+          STAGE 10 • DATA MODELING
+        </Badge>
+      </div>
+
     </div>
   )
 }
