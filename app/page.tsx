@@ -12,26 +12,27 @@ export default function LandingPage() {
       {/* Top Header Badge */}
       <header className="relative z-10 w-full max-w-5xl flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="h-10 w-10 rounded-2xl bg-[#FFFF00] text-[#07111F] font-black font-display text-base flex items-center justify-center shadow-[0_0_25px_rgba(255,255,0,0.4)]">
-            DX
-          </div>
+          <img
+            src="/logo.png"
+            alt="SmartMove Nigeria Logo"
+            className="h-10 w-auto max-w-[160px] object-contain shrink-0 drop-shadow-[0_0_20px_rgba(255,255,0,0.3)]"
+          />
           <div>
-            <h1 className="text-base font-bold font-display text-white tracking-tight">DixNova</h1>
-            <p className="text-xs font-mono text-[#FFFF00] font-semibold">Driven by Data</p>
+            <h1 className="text-base font-bold font-display text-white tracking-tight">SmartMove Nigeria</h1>
+            <p className="text-xs font-mono text-[#FFFF00] font-semibold">Transportation Intelligence Platform</p>
           </div>
         </div>
-
       </header>
 
       {/* Center Screen Fit Content: Title & Responsive Start Presentation Button */}
       <main className="relative z-10 w-full max-w-3xl text-center space-y-8 my-auto flex flex-col items-center justify-center">
         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#162133]/90 border border-[#FFFF00]/40 text-xs font-mono text-[#FFFF00] shadow-2xl backdrop-blur-md">
           <span className="h-2.5 w-2.5 rounded-full bg-[#FFFF00] animate-ping" />
-          <span>DIXNOVA (DRIVEN BY DATA)</span>
+          <span>TRANSPORTATION INTELLIGENCE PLATFORM</span>
         </div>
 
         <h1 className="text-4xl sm:text-6xl md:text-7xl font-display font-black tracking-tight text-white leading-tight">
-          DixNova <br />
+          SmartMove Nigeria <br />
           <span className="text-[#FFFF00]">Analytics Platform</span>
         </h1>
 
@@ -51,7 +52,7 @@ export default function LandingPage() {
 
       {/* Clean Screen Bottom Footer */}
       <footer className="relative z-10 w-full max-w-5xl flex items-center justify-between text-xs font-mono text-foreground-secondary border-t border-white/10 pt-4">
-        <span>© 2026 DixNova • Driven by Data</span>
+        <span>© 2026 SmartMove Nigeria • Transportation Intelligence Platform</span>
         <span>Lagos Transportation Analytics</span>
       </footer>
     </div>

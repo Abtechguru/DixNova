@@ -48,12 +48,14 @@ export function FloatingPresentationController({
         
         {/* Left: Branding & Timer */}
         <div className="flex items-center gap-2">
-          <div className="h-7 w-7 sm:h-8 sm:w-8 rounded-xl bg-[#FFFF00] text-[#07111F] font-black font-display text-xs flex items-center justify-center shadow-md shrink-0">
-            DX
-          </div>
+          <img
+            src="/logo.png"
+            alt="DixNova Logo"
+            className="h-7 w-auto max-w-[120px] object-contain shrink-0"
+          />
           <div className="hidden sm:flex flex-col">
             <span className="text-[11px] font-mono text-[#FFFF00] font-bold tracking-wide">
-              DixNova (Driven by Data)
+              SmartMove Nigeria • Transportation Intelligence Platform
             </span>
             <div className="flex items-center gap-1.5">
               <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />

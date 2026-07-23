@@ -1,5 +1,7 @@
 {
   "/presentation/page": "app/presentation/page.js",
   "/page": "app/page.js",
-  "/admin/page": "app/admin/page.js"
+  "/admin/page": "app/admin/page.js",
+  "/api/cms/video/route": "app/api/cms/video/route.js",
+  "/api/cms/team-members/route": "app/api/cms/team-members/route.js"
 }

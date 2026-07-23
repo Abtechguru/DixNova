@@ -128,19 +128,19 @@ export function DataUnderstandingStage() {
 
   const datasets = dynamicDatasets.length > 0 ? dynamicDatasets : defaultDatasets
 
-  // Auto-cycle through the 5 datasets
+  // Auto-cycle through datasets
   React.useEffect(() => {
-    if (!isAutoCycling || hoveredDataset !== null) return
+    if (!isAutoCycling || hoveredDataset !== null || datasets.length === 0) return
 
     const timer = setInterval(() => {
-      setActiveDataset((prev) => (prev + 1) % 5)
+      setActiveDataset((prev) => (prev + 1) % datasets.length)
     }, 3500)
 
     return () => clearInterval(timer)
-  }, [isAutoCycling, hoveredDataset])
+  }, [isAutoCycling, hoveredDataset, datasets.length])
 
   const currentHighlight = hoveredDataset !== null ? hoveredDataset : activeDataset
-  const activeData = datasets[currentHighlight]
+  const activeData = datasets[currentHighlight] || datasets[0] || defaultDatasets[0]
 
   return (
     <div className="w-full max-w-6xl mx-auto space-y-4 my-2">
